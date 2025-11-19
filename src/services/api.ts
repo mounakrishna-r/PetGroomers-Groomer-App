@@ -15,7 +15,7 @@ interface LoginRequest {
   password?: string;
 }
 
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://896224f45e59.ngrok-free.app'; // Updated ngrok URL
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.1.2:8080'; // PetGroomers Backend
 const API_TIMEOUT = 10000;
 
 // Debug logging
