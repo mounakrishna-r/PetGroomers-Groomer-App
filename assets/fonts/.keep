@@ -1,0 +1,3 @@
+// Placeholder font file - replace with actual font
+// This is just to prevent compilation errors
+export default null;
