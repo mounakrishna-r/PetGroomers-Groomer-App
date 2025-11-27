@@ -22,6 +22,33 @@ interface IdentifierData {
   value: string;
 }
 
+// Validation utilities
+const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[A-Za-z0-9+_.-]+@(.+)$/;
+  return emailRegex.test(email);
+};
+
+const validatePhone = (phone: string): boolean => {
+  const phoneRegex = /^\+[1-9]\d{1,14}$/;
+  return phoneRegex.test(phone);
+};
+
+const getValidationError = (identifierData: IdentifierData | null): string | null => {
+  if (!identifierData || !identifierData.value.trim()) {
+    return 'Please enter your email or phone number';
+  }
+  
+  if (identifierData.type === 'email' && !validateEmail(identifierData.value)) {
+    return 'Please enter a valid email address';
+  }
+  
+  if (identifierData.type === 'phone' && !validatePhone(identifierData.value)) {
+    return 'Please enter a valid phone number with country code (e.g., +919876543210)';
+  }
+  
+  return null;
+};
+
 export default function SmartLoginScreen() {
   const [identifier, setIdentifier] = useState('');
   const [identifierData, setIdentifierData] = useState<IdentifierData | null>(null);
@@ -34,8 +61,20 @@ export default function SmartLoginScreen() {
 
   // Handle email login with password
   const handleEmailLogin = async () => {
-    if (!password.trim() || !identifierData) {
+    // Validate input fields
+    const validationError = getValidationError(identifierData);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    if (!password.trim()) {
       setError('Please enter your password');
+      return;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long');
       return;
     }
 
@@ -43,15 +82,35 @@ export default function SmartLoginScreen() {
     setError('');
 
     try {
-      const result = await login(identifierData.value, password);
+      const result = await login(identifierData!.value, password);
       
       if (result.success) {
         router.replace('/(tabs)/available');
       } else {
-        setError(result.error || 'Invalid credentials. Please try again.');
+        // Handle specific error cases
+        if (result.error?.includes('No groomer account found')) {
+          Alert.alert(
+            'Account Not Found',
+            'No account exists with this email. Would you like to create a new account?',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { 
+                text: 'Create Account', 
+                onPress: () => {
+                  router.push({
+                    pathname: '/(auth)/register',
+                    params: { email: identifierData!.value }
+                  });
+                }
+              }
+            ]
+          );
+        } else {
+          setError(result.error || 'Invalid credentials. Please try again.');
+        }
       }
     } catch (error: any) {
-      setError('Login failed. Please try again.');
+      setError('Login failed. Please check your internet connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -59,6 +118,13 @@ export default function SmartLoginScreen() {
 
   // Handle phone login with OTP
   const handleSendOTP = async () => {
+    // Validate input
+    const validationError = getValidationError(identifierData);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     if (!identifierData || identifierData.type !== 'phone') {
       setError('Please enter a valid phone number');
       return;
@@ -74,10 +140,30 @@ export default function SmartLoginScreen() {
         setOtpSent(true);
         setError('');
       } else {
-        setError(result.error || 'Failed to send OTP. Please try again.');
+        // Handle specific error cases
+        if (result.error?.includes('No groomer account found')) {
+          Alert.alert(
+            'Account Not Found',
+            'No account exists with this phone number. Would you like to create a new account?',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { 
+                text: 'Create Account', 
+                onPress: () => {
+                  router.push({
+                    pathname: '/(auth)/register',
+                    params: { phone: identifierData.value }
+                  });
+                }
+              }
+            ]
+          );
+        } else {
+          setError(result.error || 'Failed to send OTP. Please try again.');
+        }
       }
     } catch (error: any) {
-      setError('Failed to send OTP. Please try again.');
+      setError('Failed to send OTP. Please check your internet connection and try again.');
     } finally {
       setLoading(false);
     }

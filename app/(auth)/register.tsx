@@ -91,15 +91,60 @@ export default function RegisterScreen() {
 
     setOtpLoading(true);
     try {
-      const result = await GroomerAPI.sendOTP(formData.fullPhone);
+      // First check if account already exists with this phone number
+      console.log('🔍 Checking if account exists for registration...');
+      const accountCheck = await GroomerAPI.checkAccountExists(formData.fullPhone);
+      
+      if (accountCheck.success && accountCheck.data?.exists) {
+        // Account already exists, redirect to login
+        Alert.alert(
+          'Account Already Exists',
+          'A groomer account already exists with this phone number. Please use the login screen instead.',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { 
+              text: 'Go to Login', 
+              onPress: () => router.push({
+                pathname: '/(auth)/login',
+                params: { phone: formData.fullPhone }
+              })
+            }
+          ]
+        );
+        return;
+      }
+      
+      // Account doesn't exist, proceed with registration OTP
+      console.log('✅ Account check passed, sending registration OTP...');
+      const result = await GroomerAPI.sendRegistrationOTP(formData.fullPhone);
+      
       if (result.success) {
         setOtpStep('otp-sent');
         Alert.alert('OTP Sent', `Verification code sent to ${formData.fullPhone}`);
       } else {
-        Alert.alert('Error', result.error || 'Failed to send OTP');
+        // Handle specific registration errors
+        if (result.error?.includes('already registered')) {
+          Alert.alert(
+            'Account Exists',
+            'An account already exists with this phone number. Please use the login screen instead.',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { 
+                text: 'Go to Login', 
+                onPress: () => router.push({
+                  pathname: '/(auth)/login',
+                  params: { phone: formData.fullPhone }
+                })
+              }
+            ]
+          );
+        } else {
+          Alert.alert('Error', result.error || 'Failed to send OTP');
+        }
       }
     } catch (error) {
-      Alert.alert('Error', 'Failed to send OTP. Please try again.');
+      console.error('❌ Registration OTP error:', error);
+      Alert.alert('Error', 'Failed to send OTP. Please check your internet connection and try again.');
     } finally {
       setOtpLoading(false);
     }
@@ -113,14 +158,16 @@ export default function RegisterScreen() {
 
     setOtpLoading(true);
     try {
-      const result = await GroomerAPI.verifyOTP(formData.fullPhone, otp);
+      // Use registration-specific OTP verification (not login OTP)
+      const result = await GroomerAPI.verifyRegistrationOTP(formData.fullPhone, otp);
       if (result.success) {
         setOtpStep('verified');
-        Alert.alert('Success', 'Phone number verified! You can now create your account.');
+        Alert.alert('Success', 'Phone number verified! Please complete your registration details below.');
       } else {
         Alert.alert('Error', result.error || 'Invalid OTP');
       }
     } catch (error) {
+      console.error('❌ Registration OTP verification error:', error);
       Alert.alert('Error', 'OTP verification failed. Please try again.');
     } finally {
       setOtpLoading(false);

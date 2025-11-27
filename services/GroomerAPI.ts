@@ -12,16 +12,16 @@ import {
 } from '../types';
 
 // PetGroomers Backend Configuration
-const API_BASE_URL = 'http://192.168.1.5:8090/api'; // Use IP address for mobile device connectivity
+const API_BASE_URL = 'http://192.168.1.10:8090/api'; // Use correct Mac IP address for mobile device connectivity
 
 // Test backend connection
 const testConnection = async () => {
   try {
-    const response = await fetch(`http://192.168.1.5:8090/api/health`);
+    const response = await fetch(`http://192.168.1.10:8090/api/health`);
     console.log('Backend connection test:', response.ok ? 'SUCCESS' : 'FAILED');
     return response.ok;
   } catch (error) {
-    console.warn('Backend not reachable at 192.168.1.5:8090. Make sure PetGroomers backend is running.');
+    console.warn('Backend not reachable at 192.168.1.10:8090. Make sure PetGroomers backend is running.');
     return false;
   }
 };
@@ -314,6 +314,30 @@ class GroomerAPI {
     }
   }
 
+  async checkAccountExists(phone: string): Promise<ApiResponse<{exists: boolean}>> {
+    try {
+      console.log('🔍 Checking account existence for registration:');
+      console.log('📱 Phone:', phone);
+      console.log('🌐 URL:', `${API_BASE_URL}/auth/groomer/check-account`);
+      
+      const response = await this.api.post('/auth/groomer/check-account', { phone });
+      
+      console.log('✅ Account Check Response:', response.data);
+      return { 
+        success: true, 
+        data: { exists: response.data.exists },
+        message: response.data.message 
+      };
+    } catch (error: any) {
+      console.error('❌ Check account error:', error.response?.data || error.message);
+      
+      return { 
+        success: false, 
+        error: error.response?.data?.message || 'Failed to check account existence'
+      };
+    }
+  }
+
   async sendOTP(phone: string): Promise<ApiResponse<string>> {
     try {
       console.log('🔍 Sending OTP request:');
@@ -332,6 +356,59 @@ class GroomerAPI {
       return { 
         success: false, 
         error: error.response?.data?.message || 'Failed to send OTP'
+      };
+    }
+  }
+
+  async sendRegistrationOTP(phone: string): Promise<ApiResponse<string>> {
+    try {
+      console.log('🔍 Sending Registration OTP request:');
+      console.log('📱 Phone:', phone);
+      console.log('🌐 URL:', `${API_BASE_URL}/auth/groomer/send-registration-otp`);
+      
+      const response = await this.api.post('/auth/groomer/send-registration-otp', { phone });
+      
+      console.log('✅ Registration OTP Response:', response.data);
+      return { success: true, message: 'Registration OTP sent successfully' };
+    } catch (error: any) {
+      console.log('❌ Registration OTP Error:', error);
+      console.log('📊 Error Response:', error.response?.data);
+      console.log('📊 Error Status:', error.response?.status);
+      
+      return { 
+        success: false, 
+        error: error.response?.data?.message || 'Failed to send registration OTP'
+      };
+    }
+  }
+
+  async verifyRegistrationOTP(phone: string, otp: string): Promise<ApiResponse<{ verified: boolean }>> {
+    try {
+      console.log('🔍 Verifying Registration OTP:');
+      console.log('📱 Phone:', phone);
+      console.log('🔐 OTP:', otp);
+      console.log('🌐 URL:', `${API_BASE_URL}/auth/groomer/verify-registration-otp`);
+      
+      const response: AxiosResponse = await this.api.post('/auth/groomer/verify-registration-otp', { phone, otp });
+      
+      if (response.data.success) {
+        console.log('✅ Registration OTP verified successfully');
+        return { 
+          success: true, 
+          data: { verified: true },
+          message: 'Phone number verified for registration'
+        };
+      } else {
+        return { 
+          success: false, 
+          error: response.data.message || 'Invalid OTP. Please try again.' 
+        };
+      }
+    } catch (error: any) {
+      console.error('❌ Registration OTP verification error:', error.response?.data || error.message);
+      return { 
+        success: false, 
+        error: error.response?.data?.message || 'OTP verification failed'
       };
     }
   }
