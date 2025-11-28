@@ -15,6 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Colors, Typography, Spacing, BorderRadius } from '../../constants/Colors';
 import { Order } from '../../types';
 import GroomerAPI from '../../services/GroomerAPI';
+import { formatPrice } from '../../utils/currency';
 import ServiceOTPModal from '../../components/ui/ServiceOTPModal';
 
 type OrderFilter = 'all' | 'assigned' | 'in_progress' | 'completed';
@@ -167,7 +168,7 @@ export default function OrdersScreen() {
           </View>
         </View>
         <View style={styles.priceContainer}>
-          <Text style={styles.priceText}>${item.servicePrice}</Text>
+          <Text style={styles.priceText}>{formatPrice(item.servicePrice, item.service?.countryCode)}</Text>
         </View>
       </View>
 

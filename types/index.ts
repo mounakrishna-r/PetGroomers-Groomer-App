@@ -46,6 +46,12 @@ export interface Order {
   specialNotes?: string;
   groomerId?: number;
   createdAt?: string;
+  service?: {
+    id: number;
+    name: string;
+    countryCode: string;
+    basePrice: number;
+  };
 }
 
 export interface LoginCredentials {

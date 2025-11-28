@@ -15,6 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Colors, Typography, Spacing, BorderRadius } from '../../constants/Colors';
 import { EarningsData, EarningsHistory } from '../../types';
 import GroomerAPI from '../../services/GroomerAPI';
+import { formatPrice } from '../../utils/currency';
 
 type EarningsPeriod = 'today' | 'week' | 'month';
 
@@ -64,10 +65,6 @@ export default function EarningsScreen() {
     setLoading(true);
   };
 
-  const formatCurrency = (amount: number) => {
-    return `$${amount.toFixed(2)}`;
-  };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       weekday: 'short',
@@ -100,7 +97,7 @@ export default function EarningsScreen() {
             <Text style={styles.earningsTitle}>Total Earnings</Text>
           </View>
           <Text style={styles.earningsAmount}>
-            {formatCurrency(earningsData?.totalEarnings || 0)}
+            {formatPrice(earningsData?.totalEarnings || 0, 'IN')}
           </Text>
           <Text style={styles.earningsPeriod}>
             {getPeriodLabel(activePeriod)}
@@ -130,8 +127,8 @@ export default function EarningsScreen() {
         <Ionicons name="trending-up" size={24} color={Colors.primary} />
         <Text style={styles.statNumber}>
           {earningsData?.completedOrders 
-            ? formatCurrency((earningsData.totalEarnings || 0) / earningsData.completedOrders)
-            : '$0.00'
+            ? formatPrice((earningsData.totalEarnings || 0) / earningsData.completedOrders, 'IN')
+            : formatPrice(0, 'IN')
           }
         </Text>
         <Text style={styles.statLabel}>Avg/Order</Text>
@@ -172,7 +169,7 @@ export default function EarningsScreen() {
           <Text style={styles.historyCustomer}>{item.customerName}</Text>
           <Text style={styles.historyService}>{item.serviceName}</Text>
         </View>
-        <Text style={styles.historyAmount}>{formatCurrency(item.amount)}</Text>
+        <Text style={styles.historyAmount}>{formatPrice(item.amount, 'IN')}</Text>
       </View>
       <Text style={styles.historyDate}>{formatDate(item.completedAt)}</Text>
     </View>
