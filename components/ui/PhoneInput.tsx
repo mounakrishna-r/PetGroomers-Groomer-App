@@ -281,6 +281,7 @@ export default function PhoneInput({
   const indiaIndex = countries.findIndex(country => country.code === 'IN');
   const [selectedCountry, setSelectedCountry] = useState<Country>(countries[indiaIndex]); // Default to India (+91)
   const [modalVisible, setModalVisible] = useState(false);
+  const [focused, setFocused] = useState(false);
 
   const handleCountrySelect = (country: Country) => {
     setSelectedCountry(country);
@@ -305,7 +306,7 @@ export default function PhoneInput({
 
   return (
     <View style={[styles.container, style]}>
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, focused && styles.inputContainerFocused]}>
         {/* Country Code Selector */}
         <TouchableOpacity
           style={styles.countrySelector}
@@ -337,6 +338,8 @@ export default function PhoneInput({
           }}
           keyboardType="phone-pad"
           editable={!disabled}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
         />
       </View>
 
@@ -375,11 +378,15 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-    backgroundColor: Colors.surface,
-    borderRadius: BorderRadius.lg,
+    backgroundColor: Colors.background,
+    borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: Colors.background,
+    borderColor: Colors.text.disabled,
     overflow: 'hidden',
+  },
+  inputContainerFocused: {
+    borderWidth: 2,
+    borderColor: Colors.primary,
   },
   countrySelector: {
     flexDirection: 'row',
@@ -388,7 +395,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     backgroundColor: Colors.background,
     borderRightWidth: 1,
-    borderRightColor: Colors.text.disabled + '30',
+    borderRightColor: Colors.text.disabled,
     minWidth: 90,
   },
   flagText: {

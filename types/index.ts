@@ -58,8 +58,13 @@ export interface RegisterData {
   email: string;
   phone: string;
   password: string;
-  address?: string;
-  bio?: string; // Changed from experience to bio to match backend
+  address: string; // mandatory now
+  latitude?: number;
+  longitude?: number;
+  bio?: string;
+  experienceYears?: number; // 0-20
+  languages?: string[]; // e.g., ['English','Hindi','Tamil']
+  resumeUrl?: string; // optional uploaded file URL
 }
 
 export interface ApiResponse<T> {

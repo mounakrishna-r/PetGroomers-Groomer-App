@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -9,14 +9,21 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Modal,
+  FlatList,
+  Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as DocumentPicker from 'expo-document-picker';
+import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link, router, Stack } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../components/AuthContext';
 import { Colors, Typography, Spacing, BorderRadius } from '../../constants/Colors';
 import PhoneInput from '../../components/ui/PhoneInput';
 import AddressInput from '../../components/ui/AddressInput';
+import ExperienceSlider from '../../components/ui/ExperienceSlider';
 import { RegisterData } from '../../types';
 import GroomerAPI from '../../services/GroomerAPI';
 
@@ -30,6 +37,11 @@ export default function RegisterScreen() {
     confirmPassword: '',
     address: '',
     bio: '',
+    experienceYears: 0,
+    languages: [] as string[],
+    resumeUrl: '',
+    latitude: undefined as number | undefined,
+    longitude: undefined as number | undefined,
   });
   
   // OTP verification states
@@ -37,12 +49,66 @@ export default function RegisterScreen() {
   const [otp, setOtp] = useState('');
   const [otpLoading, setOtpLoading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0); // seconds remaining
   
   const { register } = useAuth();
 
+  // Cooldown timer for resend OTP
+  React.useEffect(() => {
+    if (resendCooldown > 0) {
+      const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendCooldown]);
+
   const updateField = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear errors on edit
+    if (field === 'email' || field === 'password' || field === 'confirmPassword') {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
   };
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email && !emailRegex.test(email)) {
+      setErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+    } else {
+      setErrors(prev => ({ ...prev, email: '' }));
+    }
+  };
+
+  const validatePassword = (password: string) => {
+    if (password && password.length < 8) {
+      setErrors(prev => ({ ...prev, password: 'Password must be at least 8 characters' }));
+    } else {
+      setErrors(prev => ({ ...prev, password: '' }));
+    }
+  };
+
+  const validateConfirmPassword = (confirmPassword: string) => {
+    if (confirmPassword && confirmPassword !== formData.password) {
+      setErrors(prev => ({ ...prev, confirmPassword: 'Passwords do not match' }));
+    } else {
+      setErrors(prev => ({ ...prev, confirmPassword: '' }));
+    }
+  };
+
+  const languageOptions = useMemo(
+    () => ({
+      India: [
+        'English','Hindi','Tamil','Telugu','Kannada','Malayalam','Marathi','Gujarati','Punjabi','Bengali','Assamese','Odia','Urdu','Kashmiri','Konkani','Sindhi','Dogri','Maithili','Santali','Nepali','Bhojpuri',
+      ],
+      Global: [
+        'Arabic','Spanish','French','Portuguese','German','Italian','Turkish','Russian','Chinese (Mandarin)','Japanese','Korean','Farsi (Persian)','Pashto','Sinhala',
+      ]
+    }),
+    []
+  );
+
+  const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
+  const [languageSearch, setLanguageSearch] = useState('');
+  const [errors, setErrors] = useState({ email: '', password: '', confirmPassword: '' });
 
   const validatePhoneForOTP = () => {
     const { fullPhone } = formData;
@@ -83,6 +149,16 @@ export default function RegisterScreen() {
       return false;
     }
 
+    if (!formData.address.trim()) {
+      Alert.alert('Error', 'Address is mandatory');
+      return false;
+    }
+
+    if (formData.experienceYears < 0 || formData.experienceYears > 20) {
+      Alert.alert('Error', 'Experience years must be between 0 and 20');
+      return false;
+    }
+
     return true;
   };
 
@@ -120,7 +196,8 @@ export default function RegisterScreen() {
       
       if (result.success) {
         setOtpStep('otp-sent');
-        Alert.alert('OTP Sent', `Verification code sent to ${formData.fullPhone}`);
+        setResendCooldown(120); // 2 minutes = 120 seconds
+        Alert.alert('OTP Sent', `Verification code sent to ${formData.fullPhone}. Valid for 5 minutes.`);
       } else {
         // Handle specific registration errors
         if (result.error?.includes('already registered')) {
@@ -183,10 +260,15 @@ export default function RegisterScreen() {
     const registrationData: RegisterData = {
       name: formData.name.trim(),
       email: formData.email.trim().toLowerCase(),
-      phone: formData.fullPhone, // Use the full international number
+      phone: formData.fullPhone,
       password: formData.password,
-      address: formData.address.trim() || undefined,
+      address: formData.address.trim(),
+      latitude: formData.latitude,
+      longitude: formData.longitude,
       bio: formData.bio.trim() || undefined,
+      experienceYears: formData.experienceYears,
+      languages: formData.languages,
+      resumeUrl: formData.resumeUrl || undefined,
     };
     
     console.log('📨 Registration data:', registrationData);
@@ -210,6 +292,56 @@ export default function RegisterScreen() {
     }
   };
 
+  const pickResume = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','image/*'],
+        copyToCacheDirectory: true,
+      });
+      if (result.canceled) return;
+      const file = result.assets?.[0];
+      if (!file) return;
+      // Placeholder: store local URI; backend can accept upload later or app can upload to storage and store URL
+      setFormData(prev => ({ ...prev, resumeUrl: file.uri }));
+      Alert.alert('Resume Selected', file.name || 'File selected');
+    } catch (e) {
+      Alert.alert('Error', 'Could not select file');
+    }
+  };
+
+  const LanguageChip = ({ lang }: { lang: string }) => {
+    const scaleAnim = useRef(new Animated.Value(0)).current;
+    
+    React.useEffect(() => {
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        friction: 8,
+        tension: 40,
+        useNativeDriver: true,
+      }).start();
+    }, []);
+
+    const handleRemove = () => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      Animated.timing(scaleAnim, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }).start(() => {
+        setFormData(prev => ({ ...prev, languages: prev.languages.filter(l => l !== lang) }));
+      });
+    };
+
+    return (
+      <Animated.View style={[styles.chip, { transform: [{ scale: scaleAnim }] }]}>
+        <Text style={styles.chipText}>{lang}</Text>
+        <TouchableOpacity onPress={handleRemove}>
+          <Ionicons name="close" size={14} color={Colors.text.secondary} />
+        </TouchableOpacity>
+      </Animated.View>
+    );
+  };
+
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -222,7 +354,7 @@ export default function RegisterScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.keyboardView}
         >
-          <ScrollView contentContainerStyle={styles.scrollContent}>
+          <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled" nestedScrollEnabled>
             
             {/* Header */}
             <View style={styles.header}>
@@ -244,19 +376,22 @@ export default function RegisterScreen() {
                   value={formData.name}
                   onChangeText={(value) => updateField('name', value)}
                   autoCapitalize="words"
+                  onFocus={() => Haptics.selectionAsync()}
                 />
               </View>
 
               <View style={styles.inputContainer}>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, errors.email && styles.inputError]}
                   placeholder="Email Address *"
                   placeholderTextColor={Colors.text.disabled}
                   value={formData.email}
                   onChangeText={(value) => updateField('email', value)}
+                  onBlur={() => validateEmail(formData.email)}
                   autoCapitalize="none"
                   keyboardType="email-address"
                 />
+                {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
               </View>
 
               <PhoneInput
@@ -307,9 +442,13 @@ export default function RegisterScreen() {
                       <TouchableOpacity
                         style={styles.resendButton}
                         onPress={handleSendOTP}
-                        disabled={otpLoading}
+                        disabled={otpLoading || resendCooldown > 0}
                       >
-                        <Text style={styles.resendText}>Resend OTP</Text>
+                        <Text style={[styles.resendText, resendCooldown > 0 && styles.resendTextDisabled]}>
+                          {resendCooldown > 0 
+                            ? `Resend OTP in ${Math.floor(resendCooldown / 60)}:${String(resendCooldown % 60).padStart(2, '0')}` 
+                            : 'Resend OTP'}
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   )}
@@ -325,9 +464,113 @@ export default function RegisterScreen() {
               <AddressInput
                 value={formData.address}
                 onChangeText={(value) => updateField('address', value)}
-                placeholder="Address (Optional)"
+                onCoordinatesChange={(lat: number, lng: number) => {
+                  setFormData(prev => ({ ...prev, latitude: lat, longitude: lng }));
+                }}
+                placeholder="Address *"
                 multiline
               />
+              {/* Experience Years - slider */}
+              <Text style={styles.sectionTitle}>Experience</Text>
+              <View style={{ marginBottom: Spacing.md }}>
+                <ExperienceSlider
+                  value={formData.experienceYears}
+                  onChange={(val) => setFormData(prev => ({ ...prev, experienceYears: val }))}
+                  min={0}
+                  max={20}
+                />
+              </View>
+
+              {/* Languages Known - dropdown with multi-select */}
+              <Text style={styles.sectionTitle}>Languages</Text>
+              {/* Selected chips + count */}
+              {formData.languages.length > 0 && (
+                <View style={styles.chipsRow}>
+                  <Text style={styles.selectedCount}>Selected: {formData.languages.length}</Text>
+                  {formData.languages.map(lang => (
+                    <LanguageChip key={lang} lang={lang} />
+                  ))}
+                </View>
+              )}
+              <TouchableOpacity
+                style={styles.dropdownBox}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setLanguageDropdownOpen(true);
+                }}
+              >
+                <Text style={{ color: Colors.text.primary }}>
+                  {formData.languages.length ? 'Edit languages' : 'Select languages'}
+                </Text>
+              </TouchableOpacity>
+              <Modal visible={languageDropdownOpen} animationType="slide" presentationStyle="pageSheet">
+                <View style={styles.modalContainer}>
+                  <View style={styles.modalHeader}>
+                    <Text style={styles.modalTitle}>Select Languages</Text>
+                    <TouchableOpacity onPress={() => { setLanguageDropdownOpen(false); setLanguageSearch(''); }}>
+                      <Text style={styles.modalClose}>Close</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.searchRow}>
+                    <TextInput
+                      style={styles.searchInput}
+                      placeholder="Search languages"
+                      placeholderTextColor={Colors.text.disabled}
+                      value={languageSearch}
+                      onChangeText={setLanguageSearch}
+                    />
+                  </View>
+                  {/* Grouped list: India + Global */}
+                  <FlatList
+                    data={['India','Global']}
+                    keyExtractor={(section) => section}
+                    renderItem={({ item: section }) => {
+                      const list = (languageOptions as any)[section].filter((l: string) => l.toLowerCase().includes(languageSearch.toLowerCase()));
+                      return (
+                        <View>
+                          <View style={styles.sectionHeaderRow}>
+                            <Text style={styles.sectionHeaderText}>{section}</Text>
+                            <Text style={styles.sectionHeaderSub}>{list.length} items</Text>
+                          </View>
+                          {list.map((lang: string) => (
+                            <TouchableOpacity
+                              key={lang}
+                              style={styles.dropdownItem}
+                              onPress={() => {
+                                Haptics.selectionAsync();
+                                setFormData(prev => {
+                                  const exists = prev.languages.includes(lang);
+                                  const next = exists ? prev.languages.filter(l => l !== lang) : [...prev.languages, lang];
+                                  return { ...prev, languages: next };
+                                });
+                              }}
+                            >
+                              <View style={[styles.checkbox, formData.languages.includes(lang) && styles.checkboxChecked]} />
+                              <Text style={{ color: Colors.text.primary }}>{lang}</Text>
+                              {formData.languages.includes(lang) && (
+                                <Ionicons name="checkmark" size={18} color={Colors.secondary} style={{ marginLeft: 'auto' }} />
+                              )}
+                            </TouchableOpacity>
+                          ))}
+                        </View>
+                      );
+                    }}
+                  />
+                </View>
+              </Modal>
+
+              {/* Resume Upload (optional file) */}
+              <Text style={styles.sectionTitle}>Resume / Experience (Optional)</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                <TouchableOpacity style={styles.uploadButton} onPress={pickResume}>
+                  <Text style={styles.uploadButtonText}>Upload File</Text>
+                </TouchableOpacity>
+                {formData.resumeUrl ? (
+                  <Text style={{ color: Colors.text.secondary, flex: 1 }} numberOfLines={1}>
+                    {formData.resumeUrl}
+                  </Text>
+                ) : null}
+              </View>
 
               {/* Professional Information */}
               <Text style={styles.sectionTitle}>Professional Details</Text>
@@ -349,24 +592,28 @@ export default function RegisterScreen() {
               
               <View style={styles.inputContainer}>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, errors.password && styles.inputError]}
                   placeholder="Password (min 8 characters) *"
                   placeholderTextColor={Colors.text.disabled}
                   value={formData.password}
                   onChangeText={(value) => updateField('password', value)}
+                  onBlur={() => validatePassword(formData.password)}
                   secureTextEntry
                 />
+                {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
               </View>
 
               <View style={styles.inputContainer}>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, errors.confirmPassword && styles.inputError]}
                   placeholder="Confirm Password *"
                   placeholderTextColor={Colors.text.disabled}
                   value={formData.confirmPassword}
                   onChangeText={(value) => updateField('confirmPassword', value)}
+                  onBlur={() => validateConfirmPassword(formData.confirmPassword)}
                   secureTextEntry
                 />
+                {errors.confirmPassword ? <Text style={styles.errorText}>{errors.confirmPassword}</Text> : null}
               </View>
 
               <TouchableOpacity
@@ -466,6 +713,16 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
     backgroundColor: Colors.background,
     minHeight: 48,
+  },
+  inputError: {
+    borderColor: Colors.error,
+    borderWidth: 1.5,
+  },
+  errorText: {
+    color: Colors.error,
+    fontSize: Typography.sizes.sm,
+    marginTop: 4,
+    marginLeft: 4,
   },
   registerButton: {
     borderRadius: BorderRadius.md,
@@ -570,6 +827,9 @@ const styles = StyleSheet.create({
     fontSize: Typography.sizes.sm,
     fontWeight: Typography.weights.medium,
   },
+  resendTextDisabled: {
+    color: Colors.text.disabled,
+  },
   verifiedContainer: {
     backgroundColor: '#e8f5e8',
     padding: Spacing.sm,
@@ -578,6 +838,115 @@ const styles = StyleSheet.create({
   },
   verifiedText: {
     color: '#2d5a2d',
+    fontSize: Typography.sizes.md,
+    fontWeight: Typography.weights.semibold,
+  },
+  // Dropdown styles
+  dropdownBox: {
+    borderWidth: 1,
+    borderColor: Colors.text.disabled,
+    borderRadius: BorderRadius.md,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    backgroundColor: Colors.background,
+    minHeight: 48,
+    justifyContent: 'center',
+    marginBottom: Spacing.sm,
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+  },
+  chipsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: Spacing.sm,
+  },
+  selectedCount: { color: Colors.text.secondary, marginRight: Spacing.sm },
+  chip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.surface,
+    borderWidth: 1,
+    borderColor: Colors.primary,
+    borderRadius: BorderRadius.md,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    gap: 6,
+    elevation: 2,
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  chipText: { color: Colors.primary, fontWeight: Typography.weights.medium },
+  dropdownItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.background,
+    backgroundColor: Colors.surface,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: Colors.text.disabled,
+    borderRadius: 4,
+    marginRight: 4,
+    backgroundColor: 'transparent',
+  },
+  checkboxChecked: {
+    backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
+  },
+  modalContainer: { flex: 1, backgroundColor: Colors.surface },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.background,
+  },
+  modalTitle: { color: Colors.text.primary, fontSize: Typography.sizes.lg, fontWeight: Typography.weights.semibold },
+  modalClose: { color: Colors.primary, fontSize: Typography.sizes.md, fontWeight: Typography.weights.medium },
+  searchRow: { paddingHorizontal: Spacing.lg, paddingVertical: Spacing.sm },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: Colors.text.disabled,
+    borderRadius: BorderRadius.md,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    backgroundColor: Colors.background,
+    color: Colors.text.primary,
+  },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    backgroundColor: Colors.background,
+    borderBottomWidth: 2,
+    borderBottomColor: Colors.primary,
+  },
+  sectionHeaderText: { color: Colors.text.primary, fontWeight: Typography.weights.semibold },
+  sectionHeaderSub: { color: Colors.text.secondary },
+  uploadButton: {
+    backgroundColor: Colors.secondary,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+  },
+  uploadButtonText: {
+    color: Colors.surface,
     fontSize: Typography.sizes.md,
     fontWeight: Typography.weights.semibold,
   },

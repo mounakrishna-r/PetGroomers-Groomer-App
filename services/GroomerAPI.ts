@@ -321,16 +321,19 @@ class GroomerAPI {
       console.log('🌐 URL:', `${API_BASE_URL}/auth/groomer/check-account`);
       
       const response = await this.api.post('/auth/groomer/check-account', { phone });
-      
       console.log('✅ Account Check Response:', response.data);
       return { 
         success: true, 
-        data: { exists: response.data.exists },
+        data: { exists: !!response.data.exists },
         message: response.data.message 
       };
     } catch (error: any) {
+      // If endpoint not found, treat as 'not exists' and proceed with registration
+      if (error.response?.status === 404) {
+        console.log('ℹ️ check-account endpoint not found. Assuming account does not exist.');
+        return { success: true, data: { exists: false }, message: 'Proceed to registration' };
+      }
       console.error('❌ Check account error:', error.response?.data || error.message);
-      
       return { 
         success: false, 
         error: error.response?.data?.message || 'Failed to check account existence'

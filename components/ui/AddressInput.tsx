@@ -14,6 +14,7 @@ import { Colors, Typography, Spacing, BorderRadius } from '../../constants/Color
 interface AddressInputProps {
   value: string;
   onChangeText: (text: string) => void;
+  onCoordinatesChange?: (lat: number, lng: number) => void;
   placeholder?: string;
   style?: any;
   multiline?: boolean;
@@ -23,12 +24,14 @@ interface AddressInputProps {
 export default function AddressInput({
   value,
   onChangeText,
+  onCoordinatesChange,
   placeholder = "Address",
   style,
   multiline = true,
   disabled = false,
 }: AddressInputProps) {
   const [loadingLocation, setLoadingLocation] = useState(false);
+  const [focused, setFocused] = useState(false);
 
   const getCurrentLocation = async () => {
     try {
@@ -71,9 +74,15 @@ export default function AddressInput({
           .join(', ');
 
         onChangeText(formattedAddress || `${location.coords.latitude}, ${location.coords.longitude}`);
+        if (onCoordinatesChange) {
+          onCoordinatesChange(location.coords.latitude, location.coords.longitude);
+        }
       } else {
         // Fallback to coordinates if no address found
         onChangeText(`${location.coords.latitude}, ${location.coords.longitude}`);
+        if (onCoordinatesChange) {
+          onCoordinatesChange(location.coords.latitude, location.coords.longitude);
+        }
       }
     } catch (error) {
       console.error('Error getting location:', error);
@@ -89,7 +98,7 @@ export default function AddressInput({
 
   return (
     <View style={[styles.container, style]}>
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, focused && styles.inputContainerFocused]}>
         <TextInput
           style={[
             styles.input,
@@ -103,6 +112,8 @@ export default function AddressInput({
           numberOfLines={multiline ? 3 : 1}
           textAlignVertical={multiline ? 'top' : 'center'}
           editable={!disabled}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
         />
         
         <TouchableOpacity
@@ -135,11 +146,15 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-    backgroundColor: Colors.surface,
-    borderRadius: BorderRadius.lg,
+    backgroundColor: Colors.background,
+    borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: Colors.background,
+    borderColor: Colors.text.disabled,
     alignItems: 'flex-start',
+  },
+  inputContainerFocused: {
+    borderWidth: 2,
+    borderColor: Colors.primary,
   },
   input: {
     flex: 1,
@@ -160,6 +175,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.background,
+    borderLeftWidth: 1,
+    borderLeftColor: Colors.text.disabled,
   },
   locationButtonLoading: {
     backgroundColor: Colors.warning + '20',

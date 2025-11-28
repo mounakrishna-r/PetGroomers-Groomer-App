@@ -1,0 +1,253 @@
+id,service_id,base_price,category,created_at,description,estimated_duration_minutes,icon_name,is_active,name,updated_at,pet_type,country_code
+13,IN-CAT-BASIC-001,1000,basic,2025-11-26 15:05:06.643511,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:06.643517,cat,IN
+14,IN-CAT-PREMIUM-001,1200,premium,2025-11-26 15:05:06.725527,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:06.725532,cat,IN
+15,IN-CAT-PREMIUM-002,1500,premium,2025-11-26 15:05:06.780697,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:06.780702,cat,IN
+16,IN-DOG-BASIC-001,950,basic,2025-11-26 15:05:06.833004,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:06.833008,dog,IN
+17,IN-DOG-PREMIUM-001,1200,premium,2025-11-26 15:05:06.888785,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:06.88879,dog,IN
+18,IN-DOG-PREMIUM-002,1600,premium,2025-11-26 15:05:06.944804,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:06.944809,dog,IN
+19,IN-BOTH-SUBSCRIPTION-001,6000,subscription,2025-11-26 15:05:06.999981,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:06.999987,both,IN
+20,IN-BOTH-SUBSCRIPTION-002,9000,subscription,2025-11-26 15:05:07.052995,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:07.053,both,IN
+21,IN-BOTH-SUBSCRIPTION-003,13000,subscription,2025-11-26 15:05:07.108804,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:07.108809,both,IN
+22,IN-BOTH-SUBSCRIPTION-004,20000,subscription,2025-11-26 15:05:07.165029,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:07.165033,both,IN
+23,IN-BOTH-SPECIALTY-001,2500,specialty,2025-11-26 15:05:07.222085,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:07.222092,both,IN
+24,IN-BOTH-SPECIALTY-002,1500,specialty,2025-11-26 15:05:07.277249,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:07.277259,both,IN
+25,US-CAT-BASIC-001,60,basic,2025-11-26 15:05:07.332447,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:07.332455,cat,US
+26,US-CAT-PREMIUM-001,75,premium,2025-11-26 15:05:07.38531,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:07.385314,cat,US
+27,US-CAT-PREMIUM-002,95,premium,2025-11-26 15:05:07.44056,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:07.440565,cat,US
+28,US-DOG-BASIC-001,55,basic,2025-11-26 15:05:07.493418,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:07.493421,dog,US
+29,US-DOG-PREMIUM-001,75,premium,2025-11-26 15:05:07.549561,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:07.549565,dog,US
+30,US-DOG-PREMIUM-002,100,premium,2025-11-26 15:05:07.604376,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:07.60438,dog,US
+31,US-BOTH-SUBSCRIPTION-001,400,subscription,2025-11-26 15:05:07.656513,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:07.656517,both,US
+32,US-BOTH-SUBSCRIPTION-002,600,subscription,2025-11-26 15:05:07.709074,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:07.709079,both,US
+33,US-BOTH-SUBSCRIPTION-003,850,subscription,2025-11-26 15:05:07.764713,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:07.76472,both,US
+34,US-BOTH-SUBSCRIPTION-004,1200,subscription,2025-11-26 15:05:07.81683,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:07.816836,both,US
+35,US-BOTH-SPECIALTY-001,180,specialty,2025-11-26 15:05:07.872874,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:07.872879,both,US
+36,US-BOTH-SPECIALTY-002,120,specialty,2025-11-26 15:05:07.928923,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:07.92893,both,US
+37,GB-CAT-BASIC-001,50,basic,2025-11-26 15:05:07.985031,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:07.98504,cat,GB
+38,GB-CAT-PREMIUM-001,65,premium,2025-11-26 15:05:08.040999,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:08.041004,cat,GB
+39,GB-CAT-PREMIUM-002,85,premium,2025-11-26 15:05:08.097032,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:08.097037,cat,GB
+40,GB-DOG-BASIC-001,45,basic,2025-11-26 15:05:08.153596,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:08.153604,dog,GB
+41,GB-DOG-PREMIUM-001,65,premium,2025-11-26 15:05:08.209658,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:08.209667,dog,GB
+42,GB-DOG-PREMIUM-002,90,premium,2025-11-26 15:05:08.265234,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:08.265239,dog,GB
+43,GB-BOTH-SUBSCRIPTION-001,320,subscription,2025-11-26 15:05:08.321406,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:08.321413,both,GB
+44,GB-BOTH-SUBSCRIPTION-002,480,subscription,2025-11-26 15:05:08.376427,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:08.376432,both,GB
+45,GB-BOTH-SUBSCRIPTION-003,680,subscription,2025-11-26 15:05:08.42933,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:08.429333,both,GB
+46,GB-BOTH-SUBSCRIPTION-004,950,subscription,2025-11-26 15:05:08.481671,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:08.481676,both,GB
+47,GB-BOTH-SPECIALTY-001,150,specialty,2025-11-26 15:05:08.533811,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:08.533819,both,GB
+48,GB-BOTH-SPECIALTY-002,90,specialty,2025-11-26 15:05:08.585956,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:08.585965,both,GB
+49,CA-CAT-BASIC-001,80,basic,2025-11-26 15:05:08.648805,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:08.648817,cat,CA
+50,CA-CAT-PREMIUM-001,100,premium,2025-11-26 15:05:08.701861,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:08.701881,cat,CA
+51,CA-CAT-PREMIUM-002,125,premium,2025-11-26 15:05:08.753967,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:08.753979,cat,CA
+52,CA-DOG-BASIC-001,75,basic,2025-11-26 15:05:08.811039,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:08.811051,dog,CA
+53,CA-DOG-PREMIUM-001,100,premium,2025-11-26 15:05:08.866052,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:08.866059,dog,CA
+54,CA-DOG-PREMIUM-002,130,premium,2025-11-26 15:05:08.922095,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:08.9221,dog,CA
+55,CA-BOTH-SUBSCRIPTION-001,450,subscription,2025-11-26 15:05:08.978136,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:08.978145,both,CA
+56,CA-BOTH-SUBSCRIPTION-002,680,subscription,2025-11-26 15:05:09.033743,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:09.033751,both,CA
+57,CA-BOTH-SUBSCRIPTION-003,950,subscription,2025-11-26 15:05:09.085817,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:09.085821,both,CA
+58,CA-BOTH-SUBSCRIPTION-004,1400,subscription,2025-11-26 15:05:09.137785,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:09.137793,both,CA
+59,CA-BOTH-SPECIALTY-001,220,specialty,2025-11-26 15:05:09.189463,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:09.189471,both,CA
+60,CA-BOTH-SPECIALTY-002,140,specialty,2025-11-26 15:05:09.242233,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:09.242238,both,CA
+61,AU-CAT-BASIC-001,95,basic,2025-11-26 15:05:09.297688,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:09.297695,cat,AU
+62,AU-CAT-PREMIUM-001,120,premium,2025-11-26 15:05:09.350555,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:09.350559,cat,AU
+63,AU-CAT-PREMIUM-002,150,premium,2025-11-26 15:05:09.406626,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:09.406632,cat,AU
+64,AU-DOG-BASIC-001,85,basic,2025-11-26 15:05:09.462639,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:09.462646,dog,AU
+65,AU-DOG-PREMIUM-001,120,premium,2025-11-26 15:05:09.518744,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:09.518751,dog,AU
+66,AU-DOG-PREMIUM-002,160,premium,2025-11-26 15:05:09.574153,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:09.574158,dog,AU
+67,AU-BOTH-SUBSCRIPTION-001,520,subscription,2025-11-26 15:05:09.630172,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:09.630178,both,AU
+68,AU-BOTH-SUBSCRIPTION-002,780,subscription,2025-11-26 15:05:09.686864,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:09.68687,both,AU
+69,AU-BOTH-SUBSCRIPTION-003,1100,subscription,2025-11-26 15:05:09.742112,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:09.742122,both,AU
+70,AU-BOTH-SUBSCRIPTION-004,1600,subscription,2025-11-26 15:05:09.793977,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:09.793981,both,AU
+71,AU-BOTH-SPECIALTY-001,250,specialty,2025-11-26 15:05:09.846148,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:09.846158,both,AU
+72,AU-BOTH-SPECIALTY-002,160,specialty,2025-11-26 15:05:09.899278,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:09.899288,both,AU
+73,DE-CAT-BASIC-001,70,basic,2025-11-26 15:05:09.955185,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:09.955192,cat,DE
+74,DE-CAT-PREMIUM-001,85,premium,2025-11-26 15:05:10.011652,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:10.011658,cat,DE
+75,DE-CAT-PREMIUM-002,110,premium,2025-11-26 15:05:10.06708,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:10.067084,cat,DE
+76,DE-DOG-BASIC-001,65,basic,2025-11-26 15:05:10.12236,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:10.122368,dog,DE
+77,DE-DOG-PREMIUM-001,85,premium,2025-11-26 15:05:10.174403,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:10.174412,dog,DE
+78,DE-DOG-PREMIUM-002,115,premium,2025-11-26 15:05:10.226446,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:10.226451,dog,DE
+79,DE-BOTH-SUBSCRIPTION-001,420,subscription,2025-11-26 15:05:10.278459,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:10.278464,both,DE
+80,DE-BOTH-SUBSCRIPTION-002,630,subscription,2025-11-26 15:05:10.33052,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:10.330528,both,DE
+81,DE-BOTH-SUBSCRIPTION-003,890,subscription,2025-11-26 15:05:10.383546,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:10.383558,both,DE
+82,DE-BOTH-SUBSCRIPTION-004,1250,subscription,2025-11-26 15:05:10.438729,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:10.43874,both,DE
+83,DE-BOTH-SPECIALTY-001,180,specialty,2025-11-26 15:05:10.493999,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:10.494009,both,DE
+84,DE-BOTH-SPECIALTY-002,110,specialty,2025-11-26 15:05:10.550321,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:10.550332,both,DE
+85,SG-CAT-BASIC-001,85,basic,2025-11-26 15:05:10.602983,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:10.602994,cat,SG
+86,SG-CAT-PREMIUM-001,105,premium,2025-11-26 15:05:10.659078,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:10.659089,cat,SG
+87,SG-CAT-PREMIUM-002,135,premium,2025-11-26 15:05:10.715069,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:10.715081,cat,SG
+88,SG-DOG-BASIC-001,80,basic,2025-11-26 15:05:10.771186,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:10.771199,dog,SG
+89,SG-DOG-PREMIUM-001,105,premium,2025-11-26 15:05:10.827257,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:10.82727,dog,SG
+90,SG-DOG-PREMIUM-002,140,premium,2025-11-26 15:05:10.883339,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:10.883353,dog,SG
+91,SG-BOTH-SUBSCRIPTION-001,480,subscription,2025-11-26 15:05:10.939354,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:10.939367,both,SG
+92,SG-BOTH-SUBSCRIPTION-002,720,subscription,2025-11-26 15:05:10.994361,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:10.994372,both,SG
+93,SG-BOTH-SUBSCRIPTION-003,1020,subscription,2025-11-26 15:05:11.046502,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:11.046516,both,SG
+94,SG-BOTH-SUBSCRIPTION-004,1450,subscription,2025-11-26 15:05:11.098395,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:11.098406,both,SG
+95,SG-BOTH-SPECIALTY-001,220,specialty,2025-11-26 15:05:11.151069,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:11.151083,both,SG
+96,SG-BOTH-SPECIALTY-002,140,specialty,2025-11-26 15:05:11.208673,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:11.208687,both,SG
+97,AE-CAT-BASIC-001,220,basic,2025-11-26 15:05:11.262704,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:11.262716,cat,AE
+98,AE-CAT-PREMIUM-001,275,premium,2025-11-26 15:05:11.318831,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:11.318844,cat,AE
+99,AE-CAT-PREMIUM-002,350,premium,2025-11-26 15:05:11.374887,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:11.374898,cat,AE
+100,AE-DOG-BASIC-001,200,basic,2025-11-26 15:05:11.43061,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:11.430624,dog,AE
+101,AE-DOG-PREMIUM-001,275,premium,2025-11-26 15:05:11.487022,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:11.487035,dog,AE
+102,AE-DOG-PREMIUM-002,380,premium,2025-11-26 15:05:11.542433,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:11.542445,dog,AE
+103,AE-BOTH-SUBSCRIPTION-001,1250,subscription,2025-11-26 15:05:11.595101,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:11.595115,both,AE
+104,AE-BOTH-SUBSCRIPTION-002,1900,subscription,2025-11-26 15:05:11.651167,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:11.65118,both,AE
+105,AE-BOTH-SUBSCRIPTION-003,2700,subscription,2025-11-26 15:05:11.706267,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:11.706276,both,AE
+106,AE-BOTH-SUBSCRIPTION-004,3800,subscription,2025-11-26 15:05:11.7592,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:11.759206,both,AE
+107,AE-BOTH-SPECIALTY-001,550,specialty,2025-11-26 15:05:11.815199,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:11.815203,both,AE
+108,AE-BOTH-SPECIALTY-002,350,specialty,2025-11-26 15:05:11.870379,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:11.870388,both,AE
+109,JP-CAT-BASIC-001,12000,basic,2025-11-26 15:05:11.922464,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:11.922475,cat,JP
+110,JP-CAT-PREMIUM-001,15000,premium,2025-11-26 15:05:11.975455,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:11.975461,cat,JP
+111,JP-CAT-PREMIUM-002,19000,premium,2025-11-26 15:05:12.030312,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:12.030317,cat,JP
+112,JP-DOG-BASIC-001,11000,basic,2025-11-26 15:05:12.083469,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:12.083474,dog,JP
+113,JP-DOG-PREMIUM-001,15000,premium,2025-11-26 15:05:12.13861,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:12.138613,dog,JP
+114,JP-DOG-PREMIUM-002,20000,premium,2025-11-26 15:05:12.194284,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:12.194288,dog,JP
+115,JP-BOTH-SUBSCRIPTION-001,68000,subscription,2025-11-26 15:05:12.246659,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:12.246665,both,JP
+116,JP-BOTH-SUBSCRIPTION-002,102000,subscription,2025-11-26 15:05:12.302378,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:12.302387,both,JP
+117,JP-BOTH-SUBSCRIPTION-003,145000,subscription,2025-11-26 15:05:12.35448,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:12.354494,both,JP
+118,JP-BOTH-SUBSCRIPTION-004,210000,subscription,2025-11-26 15:05:12.406936,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:12.406947,both,JP
+119,JP-BOTH-SPECIALTY-001,32000,specialty,2025-11-26 15:05:12.462264,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:12.462274,both,JP
+120,JP-BOTH-SPECIALTY-002,19000,specialty,2025-11-26 15:05:12.514709,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:12.514717,both,JP
+121,FR-CAT-BASIC-001,75,basic,2025-11-26 15:05:12.570122,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:12.570128,cat,FR
+122,FR-CAT-PREMIUM-001,95,premium,2025-11-26 15:05:12.622233,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:12.622243,cat,FR
+123,FR-CAT-PREMIUM-002,120,premium,2025-11-26 15:05:12.674295,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:12.674307,cat,FR
+124,FR-DOG-BASIC-001,70,basic,2025-11-26 15:05:12.727383,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:12.727396,dog,FR
+125,FR-DOG-PREMIUM-001,95,premium,2025-11-26 15:05:12.782447,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:12.78246,dog,FR
+126,FR-DOG-PREMIUM-002,125,premium,2025-11-26 15:05:12.838687,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:12.8387,dog,FR
+127,FR-BOTH-SUBSCRIPTION-001,450,subscription,2025-11-26 15:05:12.894618,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:12.894632,both,FR
+128,FR-BOTH-SUBSCRIPTION-002,680,subscription,2025-11-26 15:05:12.946635,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:12.946648,both,FR
+129,FR-BOTH-SUBSCRIPTION-003,950,subscription,2025-11-26 15:05:13.002697,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:13.00271,both,FR
+130,FR-BOTH-SUBSCRIPTION-004,1350,subscription,2025-11-26 15:05:13.058747,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:13.058758,both,FR
+131,FR-BOTH-SPECIALTY-001,200,specialty,2025-11-26 15:05:13.1153,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:13.115312,both,FR
+132,FR-BOTH-SPECIALTY-002,120,specialty,2025-11-26 15:05:13.171463,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:13.171477,both,FR
+133,IT-CAT-BASIC-001,80,basic,2025-11-26 15:05:13.226358,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:13.226372,cat,IT
+134,IT-CAT-PREMIUM-001,100,premium,2025-11-26 15:05:13.278406,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:13.278476,cat,IT
+135,IT-CAT-PREMIUM-002,125,premium,2025-11-26 15:05:13.331744,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:13.331758,cat,IT
+136,IT-DOG-BASIC-001,75,basic,2025-11-26 15:05:13.3872,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:13.387211,dog,IT
+137,IT-DOG-PREMIUM-001,100,premium,2025-11-26 15:05:13.442408,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:13.44242,dog,IT
+138,IT-DOG-PREMIUM-002,130,premium,2025-11-26 15:05:13.495222,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:13.495234,dog,IT
+139,IT-BOTH-SUBSCRIPTION-001,480,subscription,2025-11-26 15:05:13.550465,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:13.550478,both,IT
+140,IT-BOTH-SUBSCRIPTION-002,720,subscription,2025-11-26 15:05:13.602391,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:13.602403,both,IT
+141,IT-BOTH-SUBSCRIPTION-003,1000,subscription,2025-11-26 15:05:13.658744,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:13.658756,both,IT
+142,IT-BOTH-SUBSCRIPTION-004,1450,subscription,2025-11-26 15:05:13.714408,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:13.71442,both,IT
+143,IT-BOTH-SPECIALTY-001,220,specialty,2025-11-26 15:05:13.767785,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:13.767799,both,IT
+144,IT-BOTH-SPECIALTY-002,130,specialty,2025-11-26 15:05:13.822484,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:13.822497,both,IT
+145,ES-CAT-BASIC-001,85,basic,2025-11-26 15:05:13.874669,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:13.874681,cat,ES
+146,ES-CAT-PREMIUM-001,105,premium,2025-11-26 15:05:13.93104,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:13.931052,cat,ES
+147,ES-CAT-PREMIUM-002,130,premium,2025-11-26 15:05:13.98641,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:13.986423,cat,ES
+148,ES-DOG-BASIC-001,80,basic,2025-11-26 15:05:14.039155,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:14.039168,dog,ES
+149,ES-DOG-PREMIUM-001,105,premium,2025-11-26 15:05:14.094329,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:14.09434,dog,ES
+150,ES-DOG-PREMIUM-002,135,premium,2025-11-26 15:05:14.146379,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:14.146389,dog,ES
+151,ES-BOTH-SUBSCRIPTION-001,500,subscription,2025-11-26 15:05:14.198371,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:14.198381,both,ES
+152,ES-BOTH-SUBSCRIPTION-002,750,subscription,2025-11-26 15:05:14.251075,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:14.251089,both,ES
+153,ES-BOTH-SUBSCRIPTION-003,1050,subscription,2025-11-26 15:05:14.307139,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:14.307151,both,ES
+154,ES-BOTH-SUBSCRIPTION-004,1500,subscription,2025-11-26 15:05:14.363362,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:14.363366,both,ES
+155,ES-BOTH-SPECIALTY-001,230,specialty,2025-11-26 15:05:14.419121,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:14.41913,both,ES
+156,ES-BOTH-SPECIALTY-002,140,specialty,2025-11-26 15:05:14.475301,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:14.475314,both,ES
+157,BR-CAT-BASIC-001,350,basic,2025-11-26 15:05:14.531406,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:14.531418,cat,BR
+158,BR-CAT-PREMIUM-001,450,premium,2025-11-26 15:05:14.586349,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:14.586361,cat,BR
+159,BR-CAT-PREMIUM-002,580,premium,2025-11-26 15:05:14.642411,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:14.642423,cat,BR
+160,BR-DOG-BASIC-001,320,basic,2025-11-26 15:05:14.698551,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:14.698564,dog,BR
+161,BR-DOG-PREMIUM-001,450,premium,2025-11-26 15:05:14.750633,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:14.750644,dog,BR
+162,BR-DOG-PREMIUM-002,620,premium,2025-11-26 15:05:14.806622,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:14.806636,dog,BR
+163,BR-BOTH-SUBSCRIPTION-001,1800,subscription,2025-11-26 15:05:14.85824,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:14.858245,both,BR
+164,BR-BOTH-SUBSCRIPTION-002,2700,subscription,2025-11-26 15:05:14.910772,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:14.91078,both,BR
+165,BR-BOTH-SUBSCRIPTION-003,3800,subscription,2025-11-26 15:05:14.966828,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:14.966837,both,BR
+166,BR-BOTH-SUBSCRIPTION-004,5500,subscription,2025-11-26 15:05:15.022922,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:15.022934,both,BR
+167,BR-BOTH-SPECIALTY-001,780,specialty,2025-11-26 15:05:15.079993,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:15.080006,both,BR
+168,BR-BOTH-SPECIALTY-002,480,specialty,2025-11-26 15:05:15.135075,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:15.135087,both,BR
+169,MX-CAT-BASIC-001,1800,basic,2025-11-26 15:05:15.188908,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:15.188921,cat,MX
+170,MX-CAT-PREMIUM-001,2200,premium,2025-11-26 15:05:15.24116,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:15.241172,cat,MX
+171,MX-CAT-PREMIUM-002,2800,premium,2025-11-26 15:05:15.29763,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:15.297642,cat,MX
+172,MX-DOG-BASIC-001,1650,basic,2025-11-26 15:05:15.352983,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:15.352996,dog,MX
+173,MX-DOG-PREMIUM-001,2200,premium,2025-11-26 15:05:15.409299,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:15.409309,dog,MX
+174,MX-DOG-PREMIUM-002,3000,premium,2025-11-26 15:05:15.465357,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:15.465366,dog,MX
+175,MX-BOTH-SUBSCRIPTION-001,9500,subscription,2025-11-26 15:05:15.520873,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:15.520885,both,MX
+176,MX-BOTH-SUBSCRIPTION-002,14500,subscription,2025-11-26 15:05:15.572947,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:15.572961,both,MX
+177,MX-BOTH-SUBSCRIPTION-003,20500,subscription,2025-11-26 15:05:15.624841,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:15.624854,both,MX
+178,MX-BOTH-SUBSCRIPTION-004,29000,subscription,2025-11-26 15:05:15.681537,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:15.681547,both,MX
+179,MX-BOTH-SPECIALTY-001,4200,specialty,2025-11-26 15:05:15.737705,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:15.737718,both,MX
+180,MX-BOTH-SPECIALTY-002,2500,specialty,2025-11-26 15:05:15.793715,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:15.793725,both,MX
+181,ZA-CAT-BASIC-001,3500,basic,2025-11-26 15:05:15.849895,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:15.849901,cat,ZA
+182,ZA-CAT-PREMIUM-001,4200,premium,2025-11-26 15:05:15.905845,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:15.905856,cat,ZA
+183,ZA-CAT-PREMIUM-002,5300,premium,2025-11-26 15:05:15.960568,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:15.960576,cat,ZA
+184,ZA-DOG-BASIC-001,3200,basic,2025-11-26 15:05:16.012748,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:16.01276,dog,ZA
+185,ZA-DOG-PREMIUM-001,4200,premium,2025-11-26 15:05:16.064968,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:16.06498,dog,ZA
+186,ZA-DOG-PREMIUM-002,5600,premium,2025-11-26 15:05:16.120593,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:16.120597,dog,ZA
+187,ZA-BOTH-SUBSCRIPTION-001,18000,subscription,2025-11-26 15:05:16.17282,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:16.172831,both,ZA
+188,ZA-BOTH-SUBSCRIPTION-002,27000,subscription,2025-11-26 15:05:16.225118,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:16.22513,both,ZA
+189,ZA-BOTH-SUBSCRIPTION-003,38000,subscription,2025-11-26 15:05:16.281322,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:16.281336,both,ZA
+190,ZA-BOTH-SUBSCRIPTION-004,55000,subscription,2025-11-26 15:05:16.338217,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:16.338269,both,ZA
+191,ZA-BOTH-SPECIALTY-001,8500,specialty,2025-11-26 15:05:16.393103,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:16.393108,both,ZA
+192,ZA-BOTH-SPECIALTY-002,5200,specialty,2025-11-26 15:05:16.450255,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:16.450261,both,ZA
+193,KR-CAT-BASIC-001,80000,basic,2025-11-26 15:05:16.505453,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:16.505463,cat,KR
+194,KR-CAT-PREMIUM-001,100000,premium,2025-11-26 15:05:16.561456,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:16.561463,cat,KR
+195,KR-CAT-PREMIUM-002,130000,premium,2025-11-26 15:05:16.619324,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:16.619336,cat,KR
+196,KR-DOG-BASIC-001,75000,basic,2025-11-26 15:05:16.672553,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:16.67256,dog,KR
+197,KR-DOG-PREMIUM-001,100000,premium,2025-11-26 15:05:16.728686,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:16.728695,dog,KR
+198,KR-DOG-PREMIUM-002,135000,premium,2025-11-26 15:05:16.783597,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:16.783605,dog,KR
+199,KR-BOTH-SUBSCRIPTION-001,450000,subscription,2025-11-26 15:05:16.838801,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:16.838808,both,KR
+200,KR-BOTH-SUBSCRIPTION-002,680000,subscription,2025-11-26 15:05:16.902082,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:16.902096,both,KR
+201,KR-BOTH-SUBSCRIPTION-003,950000,subscription,2025-11-26 15:05:16.957833,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:16.957842,both,KR
+202,KR-BOTH-SUBSCRIPTION-004,1350000,subscription,2025-11-26 15:05:17.009929,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:17.009935,both,KR
+203,KR-BOTH-SPECIALTY-001,220000,specialty,2025-11-26 15:05:17.062669,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:17.062674,both,KR
+204,KR-BOTH-SPECIALTY-002,130000,specialty,2025-11-26 15:05:17.118029,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:17.118033,both,KR
+205,CN-CAT-BASIC-001,650,basic,2025-11-26 15:05:17.173942,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:17.173945,cat,CN
+206,CN-CAT-PREMIUM-001,800,premium,2025-11-26 15:05:17.230318,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:17.230326,cat,CN
+207,CN-CAT-PREMIUM-002,1020,premium,2025-11-26 15:05:17.286026,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:17.286039,cat,CN
+208,CN-DOG-BASIC-001,600,basic,2025-11-26 15:05:17.342341,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:17.342356,dog,CN
+209,CN-DOG-PREMIUM-001,800,premium,2025-11-26 15:05:17.394499,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:17.394512,dog,CN
+210,CN-DOG-PREMIUM-002,1080,premium,2025-11-26 15:05:17.446506,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:17.446519,dog,CN
+211,CN-BOTH-SUBSCRIPTION-001,3800,subscription,2025-11-26 15:05:17.499249,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:17.499262,both,CN
+212,CN-BOTH-SUBSCRIPTION-002,5700,subscription,2025-11-26 15:05:17.554887,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:17.5549,both,CN
+213,CN-BOTH-SUBSCRIPTION-003,8000,subscription,2025-11-26 15:05:17.615945,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:17.615957,both,CN
+214,CN-BOTH-SUBSCRIPTION-004,11500,subscription,2025-11-26 15:05:17.670317,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:17.670328,both,CN
+215,CN-BOTH-SPECIALTY-001,1600,specialty,2025-11-26 15:05:17.72365,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:17.723663,both,CN
+216,CN-BOTH-SPECIALTY-002,950,specialty,2025-11-26 15:05:17.779407,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:17.77942,both,CN
+217,TH-CAT-BASIC-001,350,basic,2025-11-26 15:05:17.834235,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:17.834252,cat,TH
+218,TH-CAT-PREMIUM-001,450,premium,2025-11-26 15:05:17.886256,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:17.886268,cat,TH
+219,TH-CAT-PREMIUM-002,580,premium,2025-11-26 15:05:17.943199,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:17.943212,cat,TH
+220,TH-DOG-BASIC-001,320,basic,2025-11-26 15:05:18.009659,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:18.009672,dog,TH
+221,TH-DOG-PREMIUM-001,450,premium,2025-11-26 15:05:18.062273,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:18.062284,dog,TH
+222,TH-DOG-PREMIUM-002,620,premium,2025-11-26 15:05:18.115663,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:18.115677,dog,TH
+223,TH-BOTH-SUBSCRIPTION-001,2200,subscription,2025-11-26 15:05:18.170356,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:18.170365,both,TH
+224,TH-BOTH-SUBSCRIPTION-002,3300,subscription,2025-11-26 15:05:18.226569,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:18.226578,both,TH
+225,TH-BOTH-SUBSCRIPTION-003,4700,subscription,2025-11-26 15:05:18.282389,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:18.282401,both,TH
+226,TH-BOTH-SUBSCRIPTION-004,6800,subscription,2025-11-26 15:05:18.334799,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:18.334814,both,TH
+227,TH-BOTH-SPECIALTY-001,950,specialty,2025-11-26 15:05:18.390698,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:18.390708,both,TH
+228,TH-BOTH-SPECIALTY-002,580,specialty,2025-11-26 15:05:18.446879,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:18.446891,both,TH
+229,MY-CAT-BASIC-001,320,basic,2025-11-26 15:05:18.503058,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:18.503072,cat,MY
+230,MY-CAT-PREMIUM-001,400,premium,2025-11-26 15:05:18.558482,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:18.558495,cat,MY
+231,MY-CAT-PREMIUM-002,520,premium,2025-11-26 15:05:18.615183,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:18.615196,cat,MY
+232,MY-DOG-BASIC-001,290,basic,2025-11-26 15:05:18.671217,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:18.671229,dog,MY
+233,MY-DOG-PREMIUM-001,400,premium,2025-11-26 15:05:18.727304,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:18.727317,dog,MY
+234,MY-DOG-PREMIUM-002,550,premium,2025-11-26 15:05:18.782551,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:18.782562,dog,MY
+235,MY-BOTH-SUBSCRIPTION-001,1950,subscription,2025-11-26 15:05:18.836888,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:18.836899,both,MY
+236,MY-BOTH-SUBSCRIPTION-002,2950,subscription,2025-11-26 15:05:18.890531,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:18.890543,both,MY
+237,MY-BOTH-SUBSCRIPTION-003,4150,subscription,2025-11-26 15:05:18.944495,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:18.944506,both,MY
+238,MY-BOTH-SUBSCRIPTION-004,5950,subscription,2025-11-26 15:05:18.998503,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:18.998512,both,MY
+239,MY-BOTH-SPECIALTY-001,820,specialty,2025-11-26 15:05:19.050098,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:19.050103,both,MY
+240,MY-BOTH-SPECIALTY-002,520,specialty,2025-11-26 15:05:19.102468,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:19.102476,both,MY
+241,NO-CAT-BASIC-001,850,basic,2025-11-26 15:05:19.154381,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:19.154393,cat,NO
+242,NO-CAT-PREMIUM-001,1050,premium,2025-11-26 15:05:19.209369,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:19.209384,cat,NO
+243,NO-CAT-PREMIUM-002,1350,premium,2025-11-26 15:05:19.272909,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:19.272921,cat,NO
+244,NO-DOG-BASIC-001,800,basic,2025-11-26 15:05:19.336424,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:19.336438,dog,NO
+245,NO-DOG-PREMIUM-001,1050,premium,2025-11-26 15:05:19.401363,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:19.401377,dog,NO
+246,NO-DOG-PREMIUM-002,1450,premium,2025-11-26 15:05:19.465136,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:19.465148,dog,NO
+247,NO-BOTH-SUBSCRIPTION-001,5200,subscription,2025-11-26 15:05:19.52921,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:19.529223,both,NO
+248,NO-BOTH-SUBSCRIPTION-002,7800,subscription,2025-11-26 15:05:19.59291,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:19.592923,both,NO
+249,NO-BOTH-SUBSCRIPTION-003,11000,subscription,2025-11-26 15:05:19.657459,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:19.657472,both,NO
+250,NO-BOTH-SUBSCRIPTION-004,15500,subscription,2025-11-26 15:05:19.721429,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:19.721443,both,NO
+251,NO-BOTH-SPECIALTY-001,2800,specialty,2025-11-26 15:05:19.78571,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:19.78572,both,NO
+252,NO-BOTH-SPECIALTY-002,1700,specialty,2025-11-26 15:05:19.850086,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:19.850099,both,NO
+253,SE-CAT-BASIC-001,900,basic,2025-11-26 15:05:19.910034,Basic grooming package for cats,90,cat,true,Comfort Spa,2025-11-26 15:05:19.910047,cat,SE
+254,SE-CAT-PREMIUM-001,1100,premium,2025-11-26 15:05:19.972712,Premium hygiene care for cats,105,sparkles,true,Hygiene Deluxe,2025-11-26 15:05:19.972727,cat,SE
+255,SE-CAT-PREMIUM-002,1400,premium,2025-11-26 15:05:20.037065,Complete styling and grooming for cats,120,star,true,Glamour Groom,2025-11-26 15:05:20.037078,cat,SE
+256,SE-DOG-BASIC-001,850,basic,2025-11-26 15:05:20.100881,Basic grooming package for dogs,90,dog,true,Fresh & Shine,2025-11-26 15:05:20.100894,dog,SE
+257,SE-DOG-PREMIUM-001,1100,premium,2025-11-26 15:05:20.164541,Premium hygiene care for dogs,105,sparkles,true,Hygiene Plus,2025-11-26 15:05:20.164554,dog,SE
+258,SE-DOG-PREMIUM-002,1500,premium,2025-11-26 15:05:20.228887,Complete styling and grooming for dogs,135,scissors,true,Ultimate Makeover,2025-11-26 15:05:20.228899,dog,SE
+259,SE-BOTH-SUBSCRIPTION-001,5400,subscription,2025-11-26 15:05:20.292434,Monthly grooming subscription - Silver tier,0,silver,true,Silver Care,2025-11-26 15:05:20.292444,both,SE
+260,SE-BOTH-SUBSCRIPTION-002,8100,subscription,2025-11-26 15:05:20.354915,Monthly grooming subscription - Gold tier,0,gold,true,Gold Wellness,2025-11-26 15:05:20.354928,both,SE
+261,SE-BOTH-SUBSCRIPTION-003,11400,subscription,2025-11-26 15:05:20.411909,Monthly grooming subscription - Platinum tier,0,platinum,true,Platinum Premium,2025-11-26 15:05:20.411921,both,SE
+262,SE-BOTH-SUBSCRIPTION-004,16200,subscription,2025-11-26 15:05:20.475939,Monthly grooming subscription - Royal tier,0,crown,true,Royal PawTreat,2025-11-26 15:05:20.475949,both,SE
+263,SE-BOTH-SPECIALTY-001,2900,specialty,2025-11-26 15:05:20.546434,Professional grooming training,180,book,true,Grooming Class,2025-11-26 15:05:20.546447,both,SE
+264,SE-BOTH-SPECIALTY-002,1750,specialty,2025-11-26 15:05:20.611289,Pet boarding service,0,home,true,Boarding,2025-11-26 15:05:20.611304,both,SE

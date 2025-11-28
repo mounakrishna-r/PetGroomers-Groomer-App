@@ -2,7 +2,7 @@
 export const Colors = {
   // Primary Brand Colors
   primary: '#e91e63', // Pink from logo
-  secondary: '#2196f3', // Blue from logo
+  secondary: '#00bcd4', // Cyan from logo
   
   // Pink Gradients
   pink: {
@@ -14,10 +14,10 @@ export const Colors = {
   
   // Blue Gradients  
   blue: {
-    light: '#64b5f6',
-    main: '#2196f3',
-    dark: '#1976d2',
-    gradient: ['#64b5f6', '#2196f3'] as const
+    light: '#80deea',
+    main: '#00bcd4',
+    dark: '#00838f',
+    gradient: ['#80deea', '#00bcd4'] as const
   },
   
   // Status Colors
@@ -38,7 +38,7 @@ export const Colors = {
   // Order Status Colors
   status: {
     pending: '#ff9800',
-    assigned: '#2196f3', 
+    assigned: '#00bcd4', 
     inProgress: '#9c27b0',
     completed: '#4caf50',
     cancelled: '#f44336'
@@ -47,7 +47,7 @@ export const Colors = {
   // Gradient Combinations
   gradients: {
     primary: ['#f8bbd9', '#e91e63'] as const,
-    secondary: ['#64b5f6', '#2196f3'] as const,
+    secondary: ['#80deea', '#00bcd4'] as const,
     success: ['#81c784', '#4caf50'] as const,
     warm: ['#ffb74d', '#ff9800'] as const
   }
