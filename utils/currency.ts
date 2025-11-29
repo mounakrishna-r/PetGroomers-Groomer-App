@@ -1,15 +1,26 @@
-/**
- * Currency utilities for formatting prices based on country code
- */
 
 export const CURRENCY_MAP: Record<string, { symbol: string; locale: string; code: string }> = {
-  IN: { symbol: '₹', locale: 'en-IN', code: 'INR' },
-  US: { symbol: '$', locale: 'en-US', code: 'USD' },
-  GB: { symbol: '£', locale: 'en-GB', code: 'GBP' },
-  CA: { symbol: 'CA$', locale: 'en-CA', code: 'CAD' },
-  AU: { symbol: 'A$', locale: 'en-AU', code: 'AUD' },
-  EU: { symbol: '€', locale: 'en-EU', code: 'EUR' },
-  AE: { symbol: 'AED', locale: 'en-AE', code: 'AED' },
+  IN: { symbol: '₹', locale: 'en-IN', code: 'IN' },
+  US: { symbol: '$', locale: 'en-US', code: 'US' },
+  GB: { symbol: '£', locale: 'en-GB', code: 'GB' },
+  CA: { symbol: 'CA$', locale: 'en-CA', code: 'CA' },
+  AU: { symbol: 'A$', locale: 'en-AU', code: 'AU' },
+  AE: { symbol: 'د.إ', locale: 'ar-AE', code: 'AE' },
+  CN: { symbol: '¥', locale: 'zh-CN', code: 'CN' },
+  JP: { symbol: '¥', locale: 'ja-JP', code: 'JP' },
+  SG: { symbol: 'S$', locale: 'en-SG', code: 'SG' },
+  MY: { symbol: 'RM', locale: 'ms-MY', code: 'MY' },
+  DE: { symbol: '€', locale: 'de-DE', code: 'DE' },
+  FR: { symbol: '€', locale: 'fr-FR', code: 'FR' },
+  IT: { symbol: '€', locale: 'it-IT', code: 'IT' },
+  ES: { symbol: '€', locale: 'es-ES', code: 'ES' },
+  BR: { symbol: 'R$', locale: 'pt-BR', code: 'BR' },
+  KR: { symbol: '₩', locale: 'ko-KR', code: 'KR' },
+  MX: { symbol: 'MX$', locale: 'es-MX', code: 'MX' },
+  NO: { symbol: 'kr', locale: 'nb-NO', code: 'NO' },
+  SE: { symbol: 'kr', locale: 'sv-SE', code: 'SE' },
+  TH: { symbol: '฿', locale: 'th-TH', code: 'TH' },
+  ZA: { symbol: 'R', locale: 'en-ZA', code: 'ZA' },
 };
 
 /**
@@ -39,7 +50,8 @@ export function getCurrencyLocale(countryCode: string): string {
 export function formatPrice(amount: number | null | undefined, countryCode?: string): string {
   if (amount == null) return '-';
   
-  const code = countryCode?.toUpperCase() || 'IN'; // Default to India
+  // Ensure countryCode is a string and uppercase, default to 'IN'
+  const code = countryCode ? countryCode.toUpperCase() : 'IN';
   const currency = CURRENCY_MAP[code];
   
   if (!currency) {
@@ -52,7 +64,7 @@ export function formatPrice(amount: number | null | undefined, countryCode?: str
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     })}`;
-  } catch {
+  } catch (error) {
     // Fallback if locale formatting fails
     return `${currency.symbol}${amount.toFixed(2)}`;
   }

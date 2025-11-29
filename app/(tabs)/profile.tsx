@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-  Switch,
   Alert,
   TextInput,
   RefreshControl,
@@ -23,7 +22,6 @@ import RadiusSettingsModal from '../../components/ui/RadiusSettingsModal';
 export default function ProfileScreen() {
   const { groomer, logout } = useAuth();
   const [profile, setProfile] = useState<GroomerProfile | null>(null);
-  const [isOnline, setIsOnline] = useState(false);
   const [serviceRadius, setServiceRadius] = useState(15);
   const [isEditingRadius, setIsEditingRadius] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -38,7 +36,6 @@ export default function ProfileScreen() {
       const response = await GroomerAPI.getProfile();
       if (response.success && response.data) {
         setProfile(response.data);
-        setIsOnline(response.data.isOnline);
         setServiceRadius(response.data.serviceRadius || 15);
       }
     } catch (error) {
@@ -52,18 +49,6 @@ export default function ProfileScreen() {
   const onRefresh = () => {
     setRefreshing(true);
     loadProfile();
-  };
-
-  const handleOnlineToggle = async (value: boolean) => {
-    try {
-      const response = await GroomerAPI.updateOnlineStatus(value);
-      if (response.success) {
-        setIsOnline(value);
-      }
-    } catch (error) {
-      console.error('Update online status error:', error);
-      Alert.alert('Error', 'Failed to update availability status');
-    }
   };
 
   const handleRadiusUpdate = async (newRadius: number) => {
@@ -139,17 +124,6 @@ export default function ProfileScreen() {
             </Text>
           </View>
         </View>
-      </View>
-      
-      {/* Online Status Toggle */}
-      <View style={styles.statusToggle}>
-        <Text style={styles.statusLabel}>Available for Orders</Text>
-        <Switch
-          value={isOnline}
-          onValueChange={handleOnlineToggle}
-          trackColor={{ false: Colors.surface + '50', true: Colors.primary + '50' }}
-          thumbColor={isOnline ? Colors.primary : Colors.surface}
-        />
       </View>
     </LinearGradient>
   );

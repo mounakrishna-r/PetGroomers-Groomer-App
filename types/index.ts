@@ -43,9 +43,12 @@ export interface Order {
   serviceStartTime?: string;
   serviceEndTime?: string;
   preferredDate?: string;
+  preferredTime?: string;
+  scheduledDateTime?: string;
   specialNotes?: string;
   groomerId?: number;
   createdAt?: string;
+  countryCode?: string;
   service?: {
     id: number;
     name: string;

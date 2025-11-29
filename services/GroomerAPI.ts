@@ -445,6 +445,31 @@ class GroomerAPI {
     }
   }
 
+  // Update groomer's current location (like Swiggy)
+  async updateCurrentLocation(latitude: number, longitude: number): Promise<ApiResponse<any>> {
+    try {
+      const groomerData = await this.getStoredGroomerData();
+      if (!groomerData) throw new Error('No groomer data found');
+      
+      console.log('📍 Updating current location:', { latitude, longitude });
+      
+      const response: AxiosResponse = await this.api.put(`/groomer/profile`, {
+        id: groomerData.id,
+        currentLatitude: latitude,
+        currentLongitude: longitude
+      });
+      
+      console.log('✅ Current location updated');
+      return { success: true, data: response.data };
+    } catch (error: any) {
+      console.error('❌ Failed to update current location:', error.message);
+      return { 
+        success: false, 
+        error: error.response?.data?.message || 'Failed to update location'
+      };
+    }
+  }
+
   // ==================== ORDER MANAGEMENT APIs ====================
 
   async getAssignedOrders(): Promise<ApiResponse<Order[]>> {

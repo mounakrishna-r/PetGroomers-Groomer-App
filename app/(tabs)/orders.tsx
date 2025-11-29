@@ -153,7 +153,9 @@ export default function OrdersScreen() {
     });
   };
 
-  const renderOrderItem = ({ item }: { item: Order }) => (
+  const renderOrderItem = ({ item }: { item: Order }) => {
+    console.log(`Order #${item.id}: countryCode=${item.countryCode}, price=${item.servicePrice}`);
+    return (
     <View style={styles.orderCard}>
       
       {/* Order Header */}
@@ -168,7 +170,7 @@ export default function OrdersScreen() {
           </View>
         </View>
         <View style={styles.priceContainer}>
-          <Text style={styles.priceText}>{formatPrice(item.servicePrice, item.service?.countryCode)}</Text>
+          <Text style={styles.priceText}>{formatPrice(item.servicePrice, item.countryCode)}</Text>
         </View>
       </View>
 
@@ -247,6 +249,7 @@ export default function OrdersScreen() {
       </View>
     </View>
   );
+  };
 
   const renderFilters = () => (
     <View style={styles.filterContainer}>
