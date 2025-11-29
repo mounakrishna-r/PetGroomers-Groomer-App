@@ -18,14 +18,16 @@ import { useAuth } from '../../components/AuthContext';
 import { GroomerProfile } from '../../types';
 import GroomerAPI from '../../services/GroomerAPI';
 import RadiusSettingsModal from '../../components/ui/RadiusSettingsModal';
+import SharedLocationBar from '../../components/SharedLocationBar';
+import { useSharedLocation } from '../../components/SharedLocationContext';
 
 export default function ProfileScreen() {
   const { groomer, logout } = useAuth();
   const [profile, setProfile] = useState<GroomerProfile | null>(null);
-  const [serviceRadius, setServiceRadius] = useState(15);
   const [isEditingRadius, setIsEditingRadius] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const { serviceRadius: sharedRadius, updateServiceRadius } = useSharedLocation();
 
   useEffect(() => {
     loadProfile();
@@ -36,7 +38,10 @@ export default function ProfileScreen() {
       const response = await GroomerAPI.getProfile();
       if (response.success && response.data) {
         setProfile(response.data);
-        setServiceRadius(response.data.serviceRadius || 15);
+        // Sync with shared context if different
+        if (response.data.serviceRadius && response.data.serviceRadius !== sharedRadius) {
+          updateServiceRadius(response.data.serviceRadius);
+        }
       }
     } catch (error) {
       console.error('Load profile error:', error);
@@ -55,7 +60,7 @@ export default function ProfileScreen() {
     try {
       const response = await GroomerAPI.updateServiceRadius(newRadius);
       if (response.success) {
-        setServiceRadius(newRadius);
+        await updateServiceRadius(newRadius);
         setIsEditingRadius(false);
       }
     } catch (error) {
@@ -125,6 +130,9 @@ export default function ProfileScreen() {
           </View>
         </View>
       </View>
+      
+      {/* Shared Location & Radius */}
+      <SharedLocationBar />
     </LinearGradient>
   );
 
@@ -140,7 +148,7 @@ export default function ProfileScreen() {
           <Ionicons name="location-outline" size={24} color={Colors.primary} />
           <View style={styles.radiusText}>
             <Text style={styles.radiusLabel}>Service Radius</Text>
-            <Text style={styles.radiusValue}>{serviceRadius} km</Text>
+            <Text style={styles.radiusValue}>{sharedRadius} km</Text>
           </View>
         </View>
         <Ionicons name="chevron-forward" size={20} color={Colors.text.disabled} />
@@ -152,18 +160,18 @@ export default function ProfileScreen() {
             style={[
               styles.radiusProgress,
               { 
-                width: `${(serviceRadius / 100) * 100}%`,
+                width: `${(sharedRadius / 100) * 100}%`,
                 backgroundColor: 
-                  serviceRadius <= 25 ? Colors.status.completed :
-                  serviceRadius <= 50 ? Colors.warning :
+                  sharedRadius <= 25 ? Colors.status.completed :
+                  sharedRadius <= 50 ? Colors.warning :
                   Colors.error
               }
             ]}
           />
         </View>
         <Text style={styles.radiusDescription}>
-          {serviceRadius <= 25 ? 'Local area coverage' :
-           serviceRadius <= 50 ? 'Wide coverage area' :
+          {sharedRadius <= 25 ? 'Local area coverage' :
+           sharedRadius <= 50 ? 'Wide coverage area' :
            'Maximum coverage area'}
         </Text>
       </View>
@@ -298,7 +306,7 @@ export default function ProfileScreen() {
       {/* Radius Settings Modal */}
       <RadiusSettingsModal
         visible={isEditingRadius}
-        currentRadius={serviceRadius}
+        currentRadius={sharedRadius}
         onClose={() => setIsEditingRadius(false)}
         onSave={handleRadiusUpdate}
       />
@@ -318,7 +326,7 @@ const styles = StyleSheet.create({
   profileInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   avatarContainer: {
     width: 80,
@@ -359,6 +367,39 @@ const styles = StyleSheet.create({
     fontSize: Typography.sizes.sm,
     color: Colors.surface,
     opacity: 0.8,
+  },
+  locationRow: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+  },
+  locationButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.xs,
+  },
+  locationText: {
+    fontSize: Typography.sizes.sm,
+    color: Colors.surface,
+    fontWeight: Typography.weights.medium,
+  },
+  radiusButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.md,
+    gap: 4,
+  },
+  radiusText: {
+    fontSize: Typography.sizes.sm,
+    color: Colors.surface,
+    fontWeight: Typography.weights.semibold,
   },
   statusToggle: {
     flexDirection: 'row',

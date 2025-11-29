@@ -42,6 +42,10 @@ export default function RegisterScreen() {
     resumeUrl: '',
     latitude: undefined as number | undefined,
     longitude: undefined as number | undefined,
+    city: undefined as string | undefined,
+    state: undefined as string | undefined,
+    postalCode: undefined as string | undefined,
+    country: undefined as string | undefined,
   });
   
   // OTP verification states
@@ -265,9 +269,13 @@ export default function RegisterScreen() {
       address: formData.address.trim(),
       latitude: formData.latitude,
       longitude: formData.longitude,
+      city: formData.city,
+      state: formData.state,
+      postalCode: formData.postalCode,
+      country: formData.country,
       bio: formData.bio.trim() || undefined,
       experienceYears: formData.experienceYears,
-      languages: formData.languages,
+      languages: formData.languages.join(', '), // Convert array to comma-separated string
       resumeUrl: formData.resumeUrl || undefined,
     };
     
@@ -464,8 +472,16 @@ export default function RegisterScreen() {
               <AddressInput
                 value={formData.address}
                 onChangeText={(value) => updateField('address', value)}
-                onCoordinatesChange={(lat: number, lng: number) => {
-                  setFormData(prev => ({ ...prev, latitude: lat, longitude: lng }));
+                onLocationDataChange={(data) => {
+                  setFormData(prev => ({ 
+                    ...prev, 
+                    latitude: data.latitude,
+                    longitude: data.longitude,
+                    city: data.city,
+                    state: data.state,
+                    postalCode: data.postalCode,
+                    country: data.country,
+                  }));
                 }}
                 placeholder="Address *"
                 multiline

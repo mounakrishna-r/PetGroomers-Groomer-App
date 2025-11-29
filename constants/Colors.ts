@@ -49,7 +49,8 @@ export const Colors = {
     primary: ['#f8bbd9', '#e91e63'] as const,
     secondary: ['#80deea', '#00bcd4'] as const,
     success: ['#81c784', '#4caf50'] as const,
-    warm: ['#ffb74d', '#ff9800'] as const
+    warm: ['#ffb74d', '#ff9800'] as const,
+    accent: ['#ffb74d', '#ff9800'] as const
   }
 };
 

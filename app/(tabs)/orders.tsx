@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
+  Linking,
+  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,6 +19,9 @@ import { Order } from '../../types';
 import GroomerAPI from '../../services/GroomerAPI';
 import { formatPrice } from '../../utils/currency';
 import ServiceOTPModal from '../../components/ui/ServiceOTPModal';
+import SharedLocationBar from '../../components/SharedLocationBar';
+import { useSharedLocation } from '../../components/SharedLocationContext';
+import * as Location from 'expo-location';
 
 type OrderFilter = 'all' | 'assigned' | 'in_progress' | 'completed';
 
@@ -29,6 +34,8 @@ export default function OrdersScreen() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [otpModalVisible, setOtpModalVisible] = useState(false);
   const [otpType, setOtpType] = useState<'start' | 'complete'>('start');
+  
+  const { latitude: groomerLat, longitude: groomerLng } = useSharedLocation();
 
   // Load orders when screen comes into focus
   useFocusEffect(
@@ -141,6 +148,70 @@ export default function OrdersScreen() {
     loadOrders(); // Refresh orders after status change
   };
 
+  const handleNavigateToOrder = (order: Order) => {
+    if (!order.latitude || !order.longitude) {
+      Alert.alert('Location Unavailable', 'Order location coordinates are not available.');
+      return;
+    }
+
+    const destination = `${order.latitude},${order.longitude}`;
+    const label = encodeURIComponent(order.address || 'Order Location');
+    
+    // Calculate distance if groomer location available
+    let distance = '';
+    if (groomerLat && groomerLng) {
+      const dist = calculateDistance(groomerLat, groomerLng, order.latitude, order.longitude);
+      distance = ` (${dist.toFixed(1)}km away)`;
+    }
+
+    Alert.alert(
+      'Navigate to Order',
+      `${order.customerName}'s location${distance}\n\nChoose navigation app:`,
+      [
+        {
+          text: 'Google Maps',
+          onPress: () => {
+            const origin = groomerLat && groomerLng ? `${groomerLat},${groomerLng}` : '';
+            const url = Platform.select({
+              ios: `comgooglemaps://?daddr=${destination}&directionsmode=driving${origin ? `&saddr=${origin}` : ''}`,
+              android: `google.navigation:q=${destination}${origin ? `&origin=${origin}` : ''}`,
+            });
+            
+            Linking.canOpenURL(url!).then(supported => {
+              if (supported) {
+                Linking.openURL(url!);
+              } else {
+                // Fallback to browser
+                const webUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}${origin ? `&origin=${origin}` : ''}&travelmode=driving`;
+                Linking.openURL(webUrl);
+              }
+            });
+          }
+        },
+        {
+          text: 'Apple Maps',
+          onPress: () => {
+            const url = `http://maps.apple.com/?daddr=${destination}&dirflg=d${groomerLat && groomerLng ? `&saddr=${groomerLat},${groomerLng}` : ''}`;
+            Linking.openURL(url);
+          }
+        },
+        { text: 'Cancel', style: 'cancel' }
+      ]
+    );
+  };
+
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Not specified';
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -197,6 +268,14 @@ export default function OrdersScreen() {
         <View style={styles.infoRow}>
           <Ionicons name="location" size={16} color={Colors.primary} />
           <Text style={styles.infoText} numberOfLines={2}>{item.address}</Text>
+          {(item.status === 'ASSIGNED' || item.status === 'CONFIRMED' || item.status === 'IN_PROGRESS') && item.latitude && item.longitude && (
+            <TouchableOpacity
+              onPress={() => handleNavigateToOrder(item)}
+              style={styles.navigateButton}
+            >
+              <Ionicons name="navigate" size={20} color={Colors.primary} />
+            </TouchableOpacity>
+          )}
         </View>
         {item.preferredDate && (
           <View style={styles.infoRow}>
@@ -281,13 +360,18 @@ export default function OrdersScreen() {
   return (
     <SafeAreaView style={styles.container}>
       
-      {/* Header */}
+      {/* Header with integrated location */}
       <LinearGradient colors={Colors.gradients.primary} style={styles.header}>
         <Text style={styles.headerTitle}>My Orders</Text>
         <Text style={styles.headerSubtitle}>
           {filteredOrders.length} {filteredOrders.length === 1 ? 'order' : 'orders'}
         </Text>
+        
+        {/* Shared Location & Radius */}
+        <SharedLocationBar />
       </LinearGradient>
+
+      {/* Location Header */}
 
       {/* Filters */}
       {renderFilters()}
@@ -353,6 +437,40 @@ const styles = StyleSheet.create({
     color: Colors.surface,
     opacity: 0.9,
     marginTop: Spacing.xs,
+  },
+  locationRow: {
+    flexDirection: 'row',
+    marginTop: Spacing.md,
+    gap: Spacing.sm,
+  },
+  locationButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.xs,
+  },
+  locationText: {
+    fontSize: Typography.sizes.sm,
+    color: Colors.surface,
+    fontWeight: Typography.weights.medium,
+  },
+  radiusInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.md,
+    gap: 4,
+  },
+  radiusText: {
+    fontSize: Typography.sizes.sm,
+    color: Colors.surface,
+    fontWeight: Typography.weights.semibold,
   },
   filterContainer: {
     flexDirection: 'row',
@@ -444,6 +562,12 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
     marginLeft: Spacing.xs,
     flex: 1,
+  },
+  navigateButton: {
+    padding: Spacing.xs,
+    marginLeft: Spacing.xs,
+    backgroundColor: Colors.background,
+    borderRadius: BorderRadius.md,
   },
   actionSection: {
     borderTopWidth: 1,

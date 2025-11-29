@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -10,107 +10,46 @@ import {
   Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Slider from '@react-native-community/slider';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
-import * as Location from 'expo-location';
 import { Colors, Typography, Spacing, BorderRadius } from '../../constants/Colors';
-import { Order, Groomer } from '../../types';
+import { Order } from '../../types';
 import GroomerAPI from '../../services/GroomerAPI';
 import { useAuth } from '../../components/AuthContext';
 import { formatPrice } from '../../utils/currency';
+import SharedLocationBar from '../../components/SharedLocationBar';
+import { useSharedLocation } from '../../components/SharedLocationContext';
 
 export default function AvailableOrdersScreen() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [location, setLocation] = useState<Location.LocationObject | null>(null);
-  const [currentAddress, setCurrentAddress] = useState<string>('');
-  const [selectedRadius, setSelectedRadius] = useState<number>(10);
+  const [acceptingOrderId, setAcceptingOrderId] = useState<number | null>(null);
   const { groomer } = useAuth();
+  const { latitude, longitude, serviceRadius } = useSharedLocation();
 
   // Load available orders when screen comes into focus
   useFocusEffect(
     useCallback(() => {
       loadAvailableOrders();
-    }, [selectedRadius]) // Reload when radius changes
+    }, [serviceRadius, latitude, longitude])
   );
-
-  useEffect(() => {
-    getCurrentLocation();
-  }, []);
-
-  useEffect(() => {
-    // Reload orders when location or selected radius changes
-    if (location) {
-      loadAvailableOrders();
-    }
-  }, [location, selectedRadius]);
-
-  const getCurrentLocation = async () => {
-    try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert(
-          'Location Permission Required',
-          'Please enable location permissions to see nearby orders'
-        );
-        return;
-      }
-
-      const currentLocation = await Location.getCurrentPositionAsync({});
-      setLocation(currentLocation);
-      
-      // Update groomer's current location in database (like Swiggy)
-      if (groomer?.id) {
-        try {
-          await GroomerAPI.updateCurrentLocation(
-            currentLocation.coords.latitude,
-            currentLocation.coords.longitude
-          );
-          console.log('✅ Current location updated in database');
-        } catch (updateError) {
-          console.log('Failed to update location in database:', updateError);
-        }
-      }
-      
-      // Get address from coordinates
-      try {
-        const addresses = await Location.reverseGeocodeAsync({
-          latitude: currentLocation.coords.latitude,
-          longitude: currentLocation.coords.longitude,
-        });
-        
-        if (addresses && addresses.length > 0) {
-          const addr = addresses[0];
-          const addressParts = [addr.street, addr.city, addr.region].filter(Boolean);
-          setCurrentAddress(addressParts.join(', '));
-        }
-      } catch (geoError) {
-        console.log('Geocoding error:', geoError);
-        setCurrentAddress('Location detected');
-      }
-    } catch (error) {
-      console.error('Location error:', error);
-    }
-  };
 
   const loadAvailableOrders = async () => {
     try {
-      if (location && selectedRadius) {
+      if (latitude && longitude && serviceRadius) {
         console.log('📍 Loading orders with location filter:');
-        console.log('  Current location:', location.coords.latitude, location.coords.longitude);
-        console.log('  Selected radius:', selectedRadius, 'km');
+        console.log('  Current location:', latitude, longitude);
+        console.log('  Applied radius:', serviceRadius, 'km');
         
-        // Load orders with radius filtering using the selected radius from slider
         const response = await GroomerAPI.getAvailableOrdersWithRadius(
-          location.coords.latitude,
-          location.coords.longitude,
-          selectedRadius
+          latitude,
+          longitude,
+          serviceRadius
         );
         
         if (response.success && response.data) {
-          console.log('✅ Loaded', response.data.length, 'orders within', selectedRadius, 'km');
+          console.log('✅ Loaded', response.data.length, 'orders within', serviceRadius, 'km');
           response.data.forEach((order, index) => {
             console.log(`  Order ${index + 1}: ${order.serviceName} - ${order.distanceFromGroomer?.toFixed(2)}km away`);
           });
@@ -144,6 +83,11 @@ export default function AvailableOrdersScreen() {
   };
 
   const handleAcceptOrder = async (orderId: number) => {
+    // Prevent multiple clicks
+    if (acceptingOrderId === orderId) {
+      return;
+    }
+
     Alert.alert(
       'Accept Order',
       'Are you sure you want to accept this order?',
@@ -152,16 +96,20 @@ export default function AvailableOrdersScreen() {
         {
           text: 'Accept',
           onPress: async () => {
+            setAcceptingOrderId(orderId); // Mark this order as being accepted
             try {
               const response = await GroomerAPI.acceptOrder(orderId);
               if (response.success) {
-                Alert.alert('Success', 'Order accepted successfully!');
-                loadAvailableOrders(); // Refresh the list
+                Alert.alert('Success', 'Order accepted successfully! Check the Orders tab.');
+                // Remove the accepted order from the list immediately
+                setOrders(prevOrders => prevOrders.filter(order => order.id !== orderId));
               } else {
                 Alert.alert('Error', response.error || 'Failed to accept order');
               }
             } catch (error) {
               Alert.alert('Error', 'Network error occurred');
+            } finally {
+              setAcceptingOrderId(null); // Reset accepting state
             }
           },
         },
@@ -272,115 +220,38 @@ export default function AvailableOrdersScreen() {
       {/* Action Button */}
       <View style={styles.actionSection}>
         <TouchableOpacity
-          style={styles.acceptButton}
+          style={[styles.acceptButton, acceptingOrderId === item.id && styles.acceptButtonDisabled]}
           onPress={() => handleAcceptOrder(item.id)}
+          disabled={acceptingOrderId === item.id}
         >
-          <LinearGradient colors={Colors.gradients.secondary} style={styles.acceptButtonGradient}>
+          <LinearGradient 
+            colors={acceptingOrderId === item.id ? ['#ccc', '#999'] : Colors.gradients.secondary} 
+            style={styles.acceptButtonGradient}
+          >
             <Ionicons name="checkmark" size={16} color={Colors.surface} />
-            <Text style={styles.acceptButtonText}>Accept Order</Text>
+            <Text style={styles.acceptButtonText}>
+              {acceptingOrderId === item.id ? 'Accepting...' : 'Accept Order'}
+            </Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
     </View>
   );
 
-  const renderHeader = () => (
-    <View>
-      {/* Premium Location Card */}
-      {location && (
-        <LinearGradient
-          colors={['#ffffff', '#f8f9fa']}
-          style={styles.locationCard}
-        >
-          <View style={styles.locationTopRow}>
-            <View style={styles.locationIconContainer}>
-              <LinearGradient
-                colors={[Colors.primary, Colors.secondary]}
-                style={styles.locationIconGradient}
-              >
-                <Ionicons name="navigate" size={20} color="#fff" />
-              </LinearGradient>
-            </View>
-            <View style={styles.locationTextContainer}>
-              <Text style={styles.locationLabel}>Current Location</Text>
-              <Text style={styles.locationAddress} numberOfLines={1}>
-                {currentAddress || 'Detecting your location...'}
-              </Text>
-            </View>
-            <TouchableOpacity 
-              style={styles.updateLocationButton} 
-              onPress={getCurrentLocation}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="refresh-circle" size={22} color={Colors.primary} />
-            </TouchableOpacity>
-          </View>
-        </LinearGradient>
-      )}
-
-      {/* Premium Distance Filter */}
-      <View style={styles.distanceFilterCard}>
-        <View style={styles.filterHeaderRow}>
-          <View style={styles.filterIconBadge}>
-            <Ionicons name="radio-button-on" size={16} color={Colors.primary} />
-          </View>
-          <View style={styles.filterHeaderText}>
-            <Text style={styles.filterTitle}>Service Radius</Text>
-          </View>
-          <View style={styles.distanceValueContainer}>
-            <LinearGradient
-              colors={[Colors.primary, Colors.secondary]}
-              style={styles.distanceValueGradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-            >
-              <Text style={styles.distanceValueText}>{selectedRadius}</Text>
-              <Text style={styles.distanceUnitText}>km</Text>
-            </LinearGradient>
-          </View>
-        </View>
-        
-        {/* Premium Slider */}
-        <View style={styles.sliderContainer}>
-          <Slider
-            style={styles.slider}
-            minimumValue={5}
-            maximumValue={60}
-            step={1}
-            value={selectedRadius}
-            onValueChange={(value) => setSelectedRadius(value)}
-            minimumTrackTintColor={Colors.primary}
-            maximumTrackTintColor="#e0e0e0"
-            thumbTintColor={Colors.primary}
-          />
-          <View style={styles.sliderLabels}>
-            <Text style={styles.sliderLabelText}>5km</Text>
-            <Text style={styles.sliderLabelText}>60km</Text>
-          </View>
-        </View>
-      </View>
-
-      {/* Service Radius Info */}
-      {groomer?.serviceRadius && (
-        <View style={styles.radiusInfo}>
-          <Ionicons name="location" size={16} color={Colors.primary} />
-          <Text style={styles.radiusText}>
-            Showing orders within {groomer.serviceRadius}km of your location
-          </Text>
-        </View>
-      )}
-    </View>
-  );
+  const renderHeader = () => null; // Now using SharedLocationBar in header
 
   return (
     <SafeAreaView style={styles.container}>
       
-      {/* Header */}
+      {/* Header with integrated location */}
       <LinearGradient colors={Colors.gradients.secondary} style={styles.header}>
         <Text style={styles.headerTitle}>Available Orders</Text>
         <Text style={styles.headerSubtitle}>
           {orders.length} {orders.length === 1 ? 'order' : 'orders'} available nearby
         </Text>
+        
+        {/* Shared Location & Radius */}
+        <SharedLocationBar />
       </LinearGradient>
 
       {/* Orders List */}
@@ -389,7 +260,6 @@ export default function AvailableOrdersScreen() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderOrderItem}
         contentContainerStyle={styles.listContainer}
-        ListHeaderComponent={renderHeader}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -404,7 +274,7 @@ export default function AvailableOrdersScreen() {
             <Text style={styles.emptyText}>No orders available</Text>
             <Text style={styles.emptySubtext}>
               {groomer?.serviceRadius 
-                ? `No orders found within ${groomer.serviceRadius}km of your location. Try increasing your service radius in Profile settings.`
+                ? `No orders found within ${serviceRadius}km of your location. Try increasing your service radius.`
                 : 'Pull down to refresh or check your internet connection'
               }
             </Text>
@@ -434,6 +304,112 @@ const styles = StyleSheet.create({
     color: Colors.surface,
     opacity: 0.9,
     marginTop: Spacing.xs,
+  },
+  locationRow: {
+    flexDirection: 'row',
+    marginTop: Spacing.md,
+    gap: Spacing.sm,
+  },
+  locationButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.xs,
+  },
+  locationText: {
+    flex: 1,
+    fontSize: Typography.sizes.sm,
+    color: Colors.surface,
+    fontWeight: Typography.weights.medium,
+  },
+  radiusButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.md,
+    gap: 4,
+  },
+  radiusText: {
+    fontSize: Typography.sizes.sm,
+    color: Colors.surface,
+    fontWeight: Typography.weights.semibold,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: Colors.surface,
+    borderTopLeftRadius: BorderRadius.xl,
+    borderTopRightRadius: BorderRadius.xl,
+    padding: Spacing.xl,
+  },
+  modalTitle: {
+    fontSize: Typography.sizes.xl,
+    fontWeight: Typography.weights.bold,
+    color: Colors.text.primary,
+    marginBottom: Spacing.xs,
+  },
+  modalSubtitle: {
+    fontSize: Typography.sizes.sm,
+    color: Colors.text.secondary,
+    marginBottom: Spacing.lg,
+  },
+  radiusDisplay: {
+    alignItems: 'center',
+    marginVertical: Spacing.lg,
+  },
+  radiusValue: {
+    fontSize: Typography.sizes.header,
+    fontWeight: Typography.weights.bold,
+    color: Colors.secondary,
+    marginTop: Spacing.xs,
+  },
+  slider: {
+    width: '100%',
+    height: 40,
+  },
+  radiusLabels: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: Spacing.lg,
+  },
+  radiusLabel: {
+    fontSize: Typography.sizes.xs,
+    color: Colors.text.disabled,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  modalButton: {
+    flex: 1,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.lg,
+    alignItems: 'center',
+  },
+  modalButtonPrimary: {
+    backgroundColor: Colors.secondary,
+  },
+  modalButtonSecondary: {
+    backgroundColor: Colors.background,
+  },
+  modalButtonText: {
+    fontSize: Typography.sizes.md,
+    fontWeight: Typography.weights.semibold,
+    color: Colors.surface,
+  },
+  modalButtonTextSecondary: {
+    fontSize: Typography.sizes.md,
+    fontWeight: Typography.weights.semibold,
+    color: Colors.text.primary,
   },
   radiusInfo: {
     flexDirection: 'row',
@@ -710,6 +686,24 @@ const styles = StyleSheet.create({
     fontSize: Typography.sizes.xs,
     color: Colors.text.disabled,
     fontWeight: Typography.weights.medium,
+  },
+  applyButton: {
+    marginTop: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    overflow: 'hidden',
+  },
+  applyButtonGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: Spacing.md,
+  },
+  applyButtonText: {
+    color: '#fff',
+    fontSize: Typography.sizes.sm,
+    fontWeight: Typography.weights.bold,
+    marginLeft: Spacing.xs,
   },
   locationHeader: {
     flexDirection: 'row',

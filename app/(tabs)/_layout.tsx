@@ -1,10 +1,12 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors';
+import { LocationProvider } from '../../components/SharedLocationContext';
 
 export default function TabLayout() {
   return (
-    <Tabs
+    <LocationProvider>
+      <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors.primary,
         tabBarInactiveTintColor: Colors.text.disabled,
@@ -60,5 +62,6 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </LocationProvider>
   );
 }

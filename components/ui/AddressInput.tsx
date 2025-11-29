@@ -15,6 +15,14 @@ interface AddressInputProps {
   value: string;
   onChangeText: (text: string) => void;
   onCoordinatesChange?: (lat: number, lng: number) => void;
+  onLocationDataChange?: (data: {
+    latitude: number;
+    longitude: number;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    country?: string;
+  }) => void;
   placeholder?: string;
   style?: any;
   multiline?: boolean;
@@ -25,6 +33,7 @@ export default function AddressInput({
   value,
   onChangeText,
   onCoordinatesChange,
+  onLocationDataChange,
   placeholder = "Address",
   style,
   multiline = true,
@@ -74,13 +83,34 @@ export default function AddressInput({
           .join(', ');
 
         onChangeText(formattedAddress || `${location.coords.latitude}, ${location.coords.longitude}`);
-        if (onCoordinatesChange) {
+        
+        // Pass all location data to parent
+        if (onLocationDataChange) {
+          onLocationDataChange({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            city: address.city || '',
+            state: address.region || '',
+            postalCode: address.postalCode || '',
+            country: address.country || '',
+          });
+        } else if (onCoordinatesChange) {
+          // Fallback to old callback for backward compatibility
           onCoordinatesChange(location.coords.latitude, location.coords.longitude);
         }
       } else {
         // Fallback to coordinates if no address found
         onChangeText(`${location.coords.latitude}, ${location.coords.longitude}`);
-        if (onCoordinatesChange) {
+        if (onLocationDataChange) {
+          onLocationDataChange({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            city: '',
+            state: '',
+            postalCode: '',
+            country: '',
+          });
+        } else if (onCoordinatesChange) {
           onCoordinatesChange(location.coords.latitude, location.coords.longitude);
         }
       }

@@ -840,15 +840,21 @@ class GroomerAPI {
     }
   }
 
-  async updateLocation(latitude: number, longitude: number): Promise<ApiResponse<any>> {
+  async updateLocation(latitude: number, longitude: number, serviceRadiusKm?: number): Promise<ApiResponse<any>> {
     try {
       const groomerData = await this.getStoredGroomerData();
       if (!groomerData) throw new Error('No groomer data found');
       
-      const response: AxiosResponse = await this.api.patch(`/groomer/${groomerData.id}/location`, {
+      const payload: any = {
         latitude,
         longitude
-      });
+      };
+      
+      if (serviceRadiusKm !== undefined) {
+        payload.serviceRadiusKm = serviceRadiusKm;
+      }
+      
+      const response: AxiosResponse = await this.api.patch(`/groomer/${groomerData.id}/location`, payload);
       return { success: true, data: response.data };
     } catch (error: any) {
       return { 

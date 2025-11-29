@@ -1,2 +1,0 @@
-id,address,available_services,bio,city,commission_percentage,created_at,current_latitude,current_longitude,email,is_active,is_available_for_orders,is_verified,last_location_update,latitude,longitude,name,password,phone,profile_image_url,rating,service_radius_km,state,total_earnings,total_orders,updated_at,working_hours
-1,,,4,,70,2025-11-28 21:42:24.043655,,,mounakrishnarouthu@gmail.com,true,false,false,,,,Mounakrishna,$2a$10$qAFxlcdpDzHDFDMB8A4Hfu0e3X6VZcmGOjQRDJWf4Yp06NbVyA766,+918179098127,,0,10,,0,2,2025-11-28 21:47:04.586001,

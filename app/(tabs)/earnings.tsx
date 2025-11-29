@@ -16,6 +16,7 @@ import { Colors, Typography, Spacing, BorderRadius } from '../../constants/Color
 import { EarningsData, EarningsHistory } from '../../types';
 import GroomerAPI from '../../services/GroomerAPI';
 import { formatPrice } from '../../utils/currency';
+import SharedLocationBar from '../../components/SharedLocationBar';
 
 type EarningsPeriod = 'today' | 'week' | 'month';
 
@@ -178,10 +179,13 @@ export default function EarningsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       
-      {/* Header */}
-      <LinearGradient colors={Colors.gradients.warm} style={styles.header}>
+      {/* Header with integrated location */}
+      <LinearGradient colors={Colors.gradients.accent} style={styles.header}>
         <Text style={styles.headerTitle}>Earnings</Text>
         <Text style={styles.headerSubtitle}>Track your business performance</Text>
+        
+        {/* Shared Location & Radius */}
+        <SharedLocationBar />
       </LinearGradient>
 
       <ScrollView
@@ -250,6 +254,40 @@ const styles = StyleSheet.create({
     color: Colors.surface,
     opacity: 0.9,
     marginTop: Spacing.xs,
+  },
+  locationRow: {
+    flexDirection: 'row',
+    marginTop: Spacing.md,
+    gap: Spacing.sm,
+  },
+  locationButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.xs,
+  },
+  locationText: {
+    fontSize: Typography.sizes.sm,
+    color: Colors.surface,
+    fontWeight: Typography.weights.medium,
+  },
+  radiusInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.md,
+    gap: 4,
+  },
+  radiusText: {
+    fontSize: Typography.sizes.sm,
+    color: Colors.surface,
+    fontWeight: Typography.weights.semibold,
   },
   scrollContent: {
     paddingBottom: Spacing.xl,

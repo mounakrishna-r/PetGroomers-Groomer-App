@@ -15,7 +15,6 @@ export interface Groomer {
   totalEarnings?: number;
   isActive: boolean;
   isVerified?: boolean;
-  isAvailableForOrders?: boolean;
   latitude?: number;
   longitude?: number;
   currentLatitude?: number;
@@ -70,6 +69,10 @@ export interface RegisterData {
   address: string; // mandatory now
   latitude?: number;
   longitude?: number;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
   bio?: string;
   experienceYears?: number; // 0-20
   languages?: string[]; // e.g., ['English','Hindi','Tamil']
