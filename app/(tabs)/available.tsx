@@ -89,12 +89,13 @@ export default function AvailableOrdersScreen() {
     }
 
     Alert.alert(
-      'Accept Order',
-      'Are you sure you want to accept this order?',
+      '⚠️ Legal Agreement',
+      'By accepting this order:\n\n• You CANNOT cancel once accepted\n• You agree to complete the service professionally\n• Direct solicitation of customers for off-platform work is PROHIBITED\n• Violation will result in permanent account ban and legal action\n\nProceed only if you agree to these terms.',
       [
         { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Accept',
+          text: 'I Agree & Accept',
+          style: 'destructive',
           onPress: async () => {
             setAcceptingOrderId(orderId); // Mark this order as being accepted
             try {
@@ -145,16 +146,11 @@ export default function AvailableOrdersScreen() {
           <Text style={styles.orderTitle}>New Order</Text>
           <Text style={styles.orderService}>{item.serviceName}</Text>
           {/* Prominent Date Display */}
-          {(item.preferredDate || item.scheduledDateTime) && (
+          {item.scheduledDateTime && (
             <View style={styles.dateChip}>
               <Ionicons name="calendar" size={12} color={Colors.surface} />
               <Text style={styles.dateChipText}>
-                {item.preferredDate 
-                  ? formatDate(item.preferredDate).split(',')[0] // Show just the date part
-                  : item.scheduledDateTime 
-                  ? formatDate(item.scheduledDateTime).split(',')[0]
-                  : 'ASAP'
-                }
+                {formatDate(item.scheduledDateTime).split(',')[0]}
               </Text>
             </View>
           )}
@@ -190,23 +186,12 @@ export default function AvailableOrdersScreen() {
           <Text style={styles.infoText} numberOfLines={2}>{item.address}</Text>
         </View>
         {/* Scheduling Information */}
-        {(item.preferredDate || item.scheduledDateTime) && (
+        {item.scheduledDateTime && (
           <View style={styles.infoRow}>
             <Ionicons name="calendar" size={16} color={Colors.primary} />
             <Text style={styles.infoText}>
-              {item.preferredDate 
-                ? `Preferred: ${formatDate(item.preferredDate)}` 
-                : item.scheduledDateTime 
-                ? `Scheduled: ${formatDate(item.scheduledDateTime)}`
-                : 'ASAP'
-              }
+              Scheduled: {formatDate(item.scheduledDateTime)}
             </Text>
-          </View>
-        )}
-        {item.preferredTime && (
-          <View style={styles.infoRow}>
-            <Ionicons name="time" size={16} color={Colors.primary} />
-            <Text style={styles.infoText}>Preferred Time: {item.preferredTime}</Text>
           </View>
         )}
         {item.specialNotes && (

@@ -7,6 +7,11 @@ import {
   Modal,
   StyleSheet,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -70,11 +75,20 @@ export default function ServiceOTPModal({
       return;
     }
 
+    console.log('🔐 Verifying OTP:', {
+      orderId: order.id,
+      otp: otp,
+      type: type,
+      otpLength: otp.length
+    });
+
     setLoading(true);
     try {
       const response = type === 'start'
         ? await GroomerAPI.verifyServiceStartOTP(order.id, otp)
         : await GroomerAPI.verifyServiceEndOTP(order.id, otp);
+
+      console.log('📬 OTP Verification Response:', response);
 
       if (response.success) {
         Alert.alert(
@@ -88,6 +102,7 @@ export default function ServiceOTPModal({
         Alert.alert('Error', response.error || 'Invalid OTP');
       }
     } catch (error) {
+      console.error('❌ OTP Verification Error:', error);
       Alert.alert('Error', 'Network error occurred');
     } finally {
       setLoading(false);
@@ -119,8 +134,13 @@ export default function ServiceOTPModal({
       animationType="slide"
       onRequestClose={onCancel}
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.modalOverlay}
+        >
+          <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+            <View style={styles.modalContent}>
           
           {/* Header */}
           <LinearGradient
@@ -185,7 +205,8 @@ export default function ServiceOTPModal({
                     keyboardType="numeric"
                     maxLength={6}
                     textAlign="center"
-                    autoFocus
+                    editable={!loading}
+                    returnKeyType="done"
                   />
                   
                   <TouchableOpacity
@@ -226,8 +247,10 @@ export default function ServiceOTPModal({
               </TouchableOpacity>
             </View>
           </View>
-        </View>
-      </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 }
@@ -316,12 +339,11 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.lg,
-    fontSize: Typography.sizes.xl,
+    fontSize: 24,
     fontWeight: Typography.weights.bold,
     color: Colors.text.primary,
-    backgroundColor: Colors.background,
-    letterSpacing: 8,
-    textAlign: 'center',
+    backgroundColor: '#FFFFFF',
+    letterSpacing: 4,
     width: '80%',
     marginBottom: Spacing.md,
   },
