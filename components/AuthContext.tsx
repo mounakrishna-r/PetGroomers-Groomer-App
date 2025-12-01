@@ -45,11 +45,44 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (isAuth) {
         const groomerData = await GroomerAPI.getStoredGroomerData();
         if (groomerData) {
-          setAuthState({
-            isAuthenticated: true,
-            groomer: groomerData,
-            token: 'stored', // Token is stored securely
-          });
+          // Validate groomer still exists in backend by making a test API call
+          try {
+            const validationResult = await GroomerAPI.validateGroomerExists(groomerData.id);
+            if (validationResult.success) {
+              setAuthState({
+                isAuthenticated: true,
+                groomer: groomerData,
+                token: 'stored', // Token is stored securely
+              });
+            } else {
+              // Groomer deleted from backend, force logout
+              console.log('⚠️ Groomer account no longer exists, clearing local data');
+              await GroomerAPI.logout();
+              setAuthState({
+                isAuthenticated: false,
+                groomer: null,
+                token: null,
+              });
+            }
+          } catch (error: any) {
+            // If validation fails (network error), still allow cached login
+            // but if it's a GROOMER_DELETED error, force logout
+            if (error.message === 'GROOMER_DELETED') {
+              console.log('⚠️ Groomer account deleted, forcing logout');
+              setAuthState({
+                isAuthenticated: false,
+                groomer: null,
+                token: null,
+              });
+            } else {
+              // Network error, allow cached login
+              setAuthState({
+                isAuthenticated: true,
+                groomer: groomerData,
+                token: 'stored',
+              });
+            }
+          }
         }
       }
     } catch (error) {

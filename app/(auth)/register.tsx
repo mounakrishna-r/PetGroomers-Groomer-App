@@ -26,6 +26,7 @@ import AddressInput from '../../components/ui/AddressInput';
 import ExperienceSlider from '../../components/ui/ExperienceSlider';
 import { RegisterData } from '../../types';
 import GroomerAPI from '../../services/GroomerAPI';
+import SupabaseStorage from '../../services/SupabaseStorage';
 
 export default function RegisterScreen() {
   const [formData, setFormData] = useState({
@@ -40,6 +41,7 @@ export default function RegisterScreen() {
     experienceYears: 0,
     languages: [] as string[],
     resumeUrl: '',
+    resumeFileName: '', // Store original filename
     latitude: undefined as number | undefined,
     longitude: undefined as number | undefined,
     city: undefined as string | undefined,
@@ -53,6 +55,7 @@ export default function RegisterScreen() {
   const [otp, setOtp] = useState('');
   const [otpLoading, setOtpLoading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploadingResume, setUploadingResume] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0); // seconds remaining
   
   const { register } = useAuth();
@@ -302,18 +305,51 @@ export default function RegisterScreen() {
 
   const pickResume = async () => {
     try {
+      setUploadingResume(true);
       const result = await DocumentPicker.getDocumentAsync({
         type: ['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','image/*'],
         copyToCacheDirectory: true,
       });
-      if (result.canceled) return;
+      
+      if (result.canceled) {
+        setUploadingResume(false);
+        return;
+      }
+      
       const file = result.assets?.[0];
-      if (!file) return;
-      // Placeholder: store local URI; backend can accept upload later or app can upload to storage and store URL
-      setFormData(prev => ({ ...prev, resumeUrl: file.uri }));
-      Alert.alert('Resume Selected', file.name || 'File selected');
-    } catch (e) {
-      Alert.alert('Error', 'Could not select file');
+      if (!file) {
+        setUploadingResume(false);
+        return;
+      }
+      
+      // For now, we need groomer ID to upload
+      // So store file locally, upload will happen after registration
+      // OR we can generate temp ID
+      const tempId = Date.now(); // Temporary ID for filename
+      
+      // Upload to Supabase Storage
+      const uploadResult = await SupabaseStorage.uploadResume(
+        file.uri,
+        tempId,
+        file.name || 'resume.pdf'
+      );
+      
+      if (uploadResult.success && uploadResult.url) {
+        setFormData(prev => ({ 
+          ...prev, 
+          resumeUrl: uploadResult.url!,
+          resumeFileName: file.name || 'resume.pdf'
+        }));
+        Alert.alert('Success', `Resume uploaded: ${file.name}`);
+      } else {
+        Alert.alert('Upload Failed', uploadResult.error || 'Could not upload file to server');
+      }
+      
+      setUploadingResume(false);
+    } catch (e: any) {
+      console.error('Resume pick error:', e);
+      Alert.alert('Error', 'Could not select or upload file');
+      setUploadingResume(false);
     }
   };
 
@@ -578,12 +614,18 @@ export default function RegisterScreen() {
               {/* Resume Upload (optional file) */}
               <Text style={styles.sectionTitle}>Resume / Experience (Optional)</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                <TouchableOpacity style={styles.uploadButton} onPress={pickResume}>
-                  <Text style={styles.uploadButtonText}>Upload File</Text>
+                <TouchableOpacity 
+                  style={[styles.uploadButton, uploadingResume && { opacity: 0.6 }]} 
+                  onPress={pickResume}
+                  disabled={uploadingResume}
+                >
+                  <Text style={styles.uploadButtonText}>
+                    {uploadingResume ? 'Uploading...' : 'Upload File'}
+                  </Text>
                 </TouchableOpacity>
-                {formData.resumeUrl ? (
+                {formData.resumeFileName ? (
                   <Text style={{ color: Colors.text.secondary, flex: 1 }} numberOfLines={1}>
-                    {formData.resumeUrl}
+                    ✓ {formData.resumeFileName}
                   </Text>
                 ) : null}
               </View>

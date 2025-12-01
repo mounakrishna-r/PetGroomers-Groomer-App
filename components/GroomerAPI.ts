@@ -1,6 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Constants from 'expo-constants';
 import { 
   Groomer, 
   Order, 
@@ -12,22 +11,17 @@ import {
   GroomerProfile 
 } from '../types';
 
-// PetGroomers Backend Configuration from environment variables
-const API_BASE_URL = Constants.expoConfig?.extra?.backendUrl || 'http://192.168.1.10:8090/api';
-
-if (!Constants.expoConfig?.extra?.backendUrl) {
-  console.warn('⚠️ BACKEND_URL not found in environment, using default: http://192.168.1.10:8090/api');
-}
+// PetGroomers Backend Configuration
+const API_BASE_URL = 'http://192.168.1.10:8090/api'; // Use correct Mac IP address for mobile device connectivity
 
 // Test backend connection
 const testConnection = async () => {
   try {
-    const healthUrl = `${API_BASE_URL.replace('/api', '')}/api/health`;
-    const response = await fetch(healthUrl);
+    const response = await fetch(`http://192.168.1.10:8090/api/health`);
     console.log('Backend connection test:', response.ok ? 'SUCCESS' : 'FAILED');
     return response.ok;
   } catch (error) {
-    console.warn(`Backend not reachable at ${API_BASE_URL}. Make sure PetGroomers backend is running.`);
+    console.warn('Backend not reachable at 192.168.1.10:8090. Make sure PetGroomers backend is running.');
     return false;
   }
 };
