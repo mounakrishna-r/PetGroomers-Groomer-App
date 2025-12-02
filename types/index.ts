@@ -97,6 +97,7 @@ export interface GroomerProfile {
   name: string;
   email: string;
   phone: string;
+  country?: string; // Country code for filtering services
   isAvailableForOrders?: boolean;
   rating?: number;
   totalOrders?: number;

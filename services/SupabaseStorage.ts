@@ -4,13 +4,13 @@ import Constants from 'expo-constants';
 
 // Supabase configuration from environment variables
 const SUPABASE_URL = Constants.expoConfig?.extra?.supabaseUrl || 'https://wmzrwablpeueiaokhrqt.supabase.co';
-const SUPABASE_ANON_KEY = Constants.expoConfig?.extra?.supabaseAnonKey || '';
+const SUPABASE_ANON_KEY = Constants.expoConfig?.extra?.supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndtenJ3YWJscGV1ZWlhb2tocnF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI5NTY5ODAsImV4cCI6MjA0ODUzMjk4MH0.KSHCqIRB2f9Fd-AxKyrzSRpC8l1wGIxPxXg7H_EpPhQ';
 
-if (!SUPABASE_ANON_KEY) {
-  console.error('⚠️ SUPABASE_ANON_KEY not found in environment variables');
+if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY === '') {
+  console.warn('⚠️ SUPABASE_ANON_KEY not configured in app.config.js extra');
 }
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY || 'placeholder-key');
 
 interface UploadResult {
   success: boolean;

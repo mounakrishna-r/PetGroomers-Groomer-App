@@ -950,6 +950,23 @@ class GroomerAPI {
     }
   }
 
+  /**
+   * Get services available in a specific country
+   */
+  async getServices(countryCode?: string): Promise<ApiResponse<any[]>> {
+    try {
+      const params = countryCode ? { country: countryCode } : {};
+      const response: AxiosResponse = await this.api.get('/services', { params });
+      return { success: true, data: response.data };
+    } catch (error: any) {
+      return { 
+        success: false, 
+        error: error.response?.data?.message || 'Failed to get services',
+        data: []
+      };
+    }
+  }
+
 
 }
 

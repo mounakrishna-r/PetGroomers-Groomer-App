@@ -146,7 +146,7 @@ export default function ProfileScreen() {
       >
         <View style={styles.radiusInfo}>
           <Ionicons name="location-outline" size={24} color={Colors.primary} />
-          <View style={styles.radiusText}>
+          <View style={styles.radiusTextContainer}>
             <Text style={styles.radiusLabel}>Service Radius</Text>
             <Text style={styles.radiusValue}>{sharedRadius} km</Text>
           </View>
@@ -206,17 +206,6 @@ export default function ProfileScreen() {
       
       <TouchableOpacity
         style={styles.actionItem}
-        onPress={() => router.push('/profile/payment-settings')}
-      >
-        <View style={styles.actionLeft}>
-          <Ionicons name="card-outline" size={24} color={Colors.primary} />
-          <Text style={styles.actionText}>Payment Settings</Text>
-        </View>
-        <Ionicons name="chevron-forward" size={20} color={Colors.text.disabled} />
-      </TouchableOpacity>
-      
-      <TouchableOpacity
-        style={styles.actionItem}
         onPress={() => router.push('/profile/help-support')}
       >
         <View style={styles.actionLeft}>
@@ -228,41 +217,9 @@ export default function ProfileScreen() {
     </View>
   );
 
-  const handleTestLogout = async () => {
-    try {
-      console.log('🧪 Testing AsyncStorage functionality...');
-      const testResult = await GroomerAPI.testAsyncStorage();
-      
-      if (testResult) {
-        Alert.alert('Test Success', 'AsyncStorage is working correctly. Logout should work.');
-        
-        // Test the actual logout function
-        console.log('🧪 Testing actual logout...');
-        await logout();
-        console.log('✅ Logout test completed');
-      } else {
-        Alert.alert('Test Failed', 'AsyncStorage is not working properly. This explains the logout issue.');
-      }
-    } catch (error) {
-      console.error('🧪 Test failed:', error);
-      Alert.alert('Test Error', `Test failed: ${error}`);
-    }
-  };
-
   const renderDangerZone = () => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Account Management</Text>
-      
-      {/* Debug Test Button - Remove in production */}
-      <TouchableOpacity
-        style={[styles.actionItem]}
-        onPress={handleTestLogout}
-      >
-        <View style={styles.actionLeft}>
-          <Ionicons name="bug-outline" size={24} color={Colors.warning} />
-          <Text style={[styles.actionText, { color: Colors.warning }]}>Test Logout Function</Text>
-        </View>
-      </TouchableOpacity>
       
       <TouchableOpacity
         style={[styles.actionItem, styles.dangerItem]}
@@ -447,7 +404,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  radiusText: {
+  radiusTextContainer: {
     marginLeft: Spacing.sm,
   },
   radiusLabel: {

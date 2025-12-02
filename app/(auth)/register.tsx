@@ -278,7 +278,7 @@ export default function RegisterScreen() {
       country: formData.country,
       bio: formData.bio.trim() || undefined,
       experienceYears: formData.experienceYears,
-      languages: formData.languages.join(', '), // Convert array to comma-separated string
+      languages: formData.languages.length > 0 ? formData.languages : undefined,
       resumeUrl: formData.resumeUrl || undefined,
     };
     
