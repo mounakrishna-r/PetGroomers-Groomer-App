@@ -77,6 +77,8 @@ export interface RegisterData {
   experienceYears?: number; // 0-20
   languages?: string[]; // e.g., ['English','Hindi','Tamil']
   resumeUrl?: string; // optional uploaded file URL
+  identityDocumentUrl?: string; // Identity proof document URL
+  drivingLicenseUrl?: string; // Driving license document URL
 }
 
 export interface ApiResponse<T> {

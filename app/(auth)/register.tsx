@@ -42,6 +42,10 @@ export default function RegisterScreen() {
     languages: [] as string[],
     resumeUrl: '',
     resumeFileName: '', // Store original filename
+    identityDocumentUrl: '',
+    identityDocumentFileName: '',
+    drivingLicenseUrl: '',
+    drivingLicenseFileName: '',
     latitude: undefined as number | undefined,
     longitude: undefined as number | undefined,
     city: undefined as string | undefined,
@@ -56,6 +60,8 @@ export default function RegisterScreen() {
   const [otpLoading, setOtpLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [uploadingResume, setUploadingResume] = useState(false);
+  const [uploadingIdentityDoc, setUploadingIdentityDoc] = useState(false);
+  const [uploadingLicense, setUploadingLicense] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0); // seconds remaining
   
   const { register } = useAuth();
@@ -158,6 +164,16 @@ export default function RegisterScreen() {
 
     if (!formData.address.trim()) {
       Alert.alert('Error', 'Address is mandatory');
+      return false;
+    }
+
+    if (!formData.identityDocumentUrl) {
+      Alert.alert('Error', 'Please upload your identity document (Aadhaar/Voter ID/Passport)');
+      return false;
+    }
+
+    if (!formData.drivingLicenseUrl) {
+      Alert.alert('Error', 'Please upload your driving license');
       return false;
     }
 
@@ -280,6 +296,8 @@ export default function RegisterScreen() {
       experienceYears: formData.experienceYears,
       languages: formData.languages.length > 0 ? formData.languages : undefined,
       resumeUrl: formData.resumeUrl || undefined,
+      identityDocumentUrl: formData.identityDocumentUrl,
+      drivingLicenseUrl: formData.drivingLicenseUrl,
     };
     
     console.log('📨 Registration data:', registrationData);
@@ -340,16 +358,112 @@ export default function RegisterScreen() {
           resumeUrl: uploadResult.url!,
           resumeFileName: file.name || 'resume.pdf'
         }));
-        Alert.alert('Success', `Resume uploaded: ${file.name}`);
+        Alert.alert('Success', `Resume uploaded successfully!`);
       } else {
-        Alert.alert('Upload Failed', uploadResult.error || 'Could not upload file to server');
+        Alert.alert('Upload Failed', uploadResult.error || 'Could not upload file. Please try again.');
       }
       
       setUploadingResume(false);
     } catch (e: any) {
       console.error('Resume pick error:', e);
-      Alert.alert('Error', 'Could not select or upload file');
+      Alert.alert('Error', 'Could not upload file. Please try again.');
       setUploadingResume(false);
+    }
+  };
+
+  const pickIdentityDocument = async () => {
+    try {
+      setUploadingIdentityDoc(true);
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['image/*', 'application/pdf'],
+        copyToCacheDirectory: true,
+      });
+      
+      if (result.canceled) {
+        setUploadingIdentityDoc(false);
+        return;
+      }
+      
+      const file = result.assets?.[0];
+      if (!file) {
+        setUploadingIdentityDoc(false);
+        return;
+      }
+      
+      const tempId = Date.now();
+      
+      // Upload to Supabase Storage
+      const uploadResult = await SupabaseStorage.uploadDocument(
+        file.uri,
+        tempId,
+        `identity_${file.name || 'document.jpg'}`,
+        'identity'
+      );
+      
+      if (uploadResult.success && uploadResult.url) {
+        setFormData(prev => ({ 
+          ...prev, 
+          identityDocumentUrl: uploadResult.url!,
+          identityDocumentFileName: file.name || 'identity_document.jpg'
+        }));
+        Alert.alert('Success', `Identity document uploaded successfully!`);
+      } else {
+        Alert.alert('Upload Failed', uploadResult.error || 'Could not upload document. Please try again.');
+      }
+      
+      setUploadingIdentityDoc(false);
+    } catch (e: any) {
+      console.error('Identity document pick error:', e);
+      Alert.alert('Error', 'Could not select or upload document');
+      setUploadingIdentityDoc(false);
+    }
+  };
+
+  const pickDrivingLicense = async () => {
+    try {
+      setUploadingLicense(true);
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['image/*', 'application/pdf'],
+        copyToCacheDirectory: true,
+      });
+      
+      if (result.canceled) {
+        setUploadingLicense(false);
+        return;
+      }
+      
+      const file = result.assets?.[0];
+      if (!file) {
+        setUploadingLicense(false);
+        return;
+      }
+      
+      const tempId = Date.now();
+      
+      // Upload to Supabase Storage
+      const uploadResult = await SupabaseStorage.uploadDocument(
+        file.uri,
+        tempId,
+        `license_${file.name || 'document.jpg'}`,
+        'license'
+      );
+      
+      if (uploadResult.success && uploadResult.url) {
+        setFormData(prev => ({ 
+          ...prev, 
+          drivingLicenseUrl: uploadResult.url!,
+          drivingLicenseFileName: file.name || 'driving_license.jpg'
+        }));
+        Alert.alert('Success', `Driving license uploaded successfully!`);
+      } else {
+        Alert.alert('Upload Failed', uploadResult.error || 'Could not upload document. Please try again.');
+      }
+      
+      setUploadingLicense(false);
+    } catch (e: any) {
+      console.error('Driving license pick error:', e);
+      Alert.alert('Error', 'Could not select or upload document');
+      setUploadingLicense(false);
     }
   };
 
@@ -643,6 +757,59 @@ export default function RegisterScreen() {
                   multiline
                   numberOfLines={3}
                 />
+              </View>
+
+              {/* Document Upload */}
+              <Text style={styles.sectionTitle}>Document Verification</Text>
+              
+              {/* Identity Document Upload */}
+              <View style={styles.inputContainer}>
+                <TouchableOpacity
+                  style={[styles.uploadButton, uploadingIdentityDoc && styles.uploadButtonDisabled]}
+                  onPress={pickIdentityDocument}
+                  disabled={uploadingIdentityDoc}
+                >
+                  <View style={styles.uploadButtonContent}>
+                    <Ionicons 
+                      name={formData.identityDocumentUrl ? "document-text" : "add-outline"} 
+                      size={20} 
+                      color={formData.identityDocumentUrl ? Colors.primary.main : Colors.text.disabled} 
+                    />
+                    <Text style={[
+                      styles.uploadButtonText,
+                      formData.identityDocumentUrl && styles.uploadButtonTextSuccess
+                    ]}>
+                      {uploadingIdentityDoc ? 'Uploading...' : 
+                       formData.identityDocumentUrl ? `✓ ${formData.identityDocumentFileName}` : 
+                       'Identity Proof (Aadhaar/Voter ID/Passport) *'}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+              {/* Driving License Upload */}
+              <View style={styles.inputContainer}>
+                <TouchableOpacity
+                  style={[styles.uploadButton, uploadingLicense && styles.uploadButtonDisabled]}
+                  onPress={pickDrivingLicense}
+                  disabled={uploadingLicense}
+                >
+                  <View style={styles.uploadButtonContent}>
+                    <Ionicons 
+                      name={formData.drivingLicenseUrl ? "car" : "add-outline"} 
+                      size={20} 
+                      color={formData.drivingLicenseUrl ? Colors.primary.main : Colors.text.disabled} 
+                    />
+                    <Text style={[
+                      styles.uploadButtonText,
+                      formData.drivingLicenseUrl && styles.uploadButtonTextSuccess
+                    ]}>
+                      {uploadingLicense ? 'Uploading...' : 
+                       formData.drivingLicenseUrl ? `✓ ${formData.drivingLicenseFileName}` : 
+                       'Driving License *'}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               </View>
 
               {/* Security */}
@@ -998,14 +1165,33 @@ const styles = StyleSheet.create({
   sectionHeaderText: { color: Colors.text.primary, fontWeight: Typography.weights.semibold },
   sectionHeaderSub: { color: Colors.text.secondary },
   uploadButton: {
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.background,
+    borderWidth: 2,
+    borderColor: Colors.text.disabled,
+    borderStyle: 'dashed',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.lg,
     borderRadius: BorderRadius.md,
+    marginBottom: Spacing.sm,
+  },
+  uploadButtonDisabled: {
+    opacity: 0.6,
+  },
+  uploadButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.sm,
   },
   uploadButtonText: {
-    color: Colors.surface,
+    color: Colors.text.disabled,
     fontSize: Typography.sizes.md,
+    fontWeight: Typography.weights.medium,
+    textAlign: 'center',
+    flex: 1,
+  },
+  uploadButtonTextSuccess: {
+    color: Colors.primary.main,
     fontWeight: Typography.weights.semibold,
   },
 });

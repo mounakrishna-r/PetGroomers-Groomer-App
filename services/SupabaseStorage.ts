@@ -90,6 +90,69 @@ class SupabaseStorage {
   }
 
   /**
+   * Upload identity document or driving license to Supabase Storage
+   * @param fileUri - Local file URI from DocumentPicker
+   * @param groomerId - Groomer ID for unique filename
+   * @param fileName - Original filename
+   * @param documentType - Type of document: 'identity' or 'license'
+   */
+  async uploadDocument(
+    fileUri: string, 
+    groomerId: number, 
+    fileName: string,
+    documentType: 'identity' | 'license'
+  ): Promise<UploadResult> {
+    try {
+      console.log(`📤 Starting ${documentType} document upload to Supabase...`);
+      console.log('   File URI:', fileUri);
+      console.log('   Groomer ID:', groomerId);
+      console.log('   File Name:', fileName);
+
+      // Read file as base64
+      const fileData = await FileSystem.readAsStringAsync(fileUri, {
+        encoding: 'base64',
+      });
+
+      // Convert base64 to blob
+      const response = await fetch(`data:application/octet-stream;base64,${fileData}`);
+      const blob = await response.blob();
+
+      // Generate unique filename
+      const timestamp = Date.now();
+      const extension = fileName.split('.').pop() || 'jpg';
+      const uniqueFileName = `${documentType}_${groomerId}_${timestamp}.${extension}`;
+
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('groomer-documents')
+        .upload(`${documentType}s/${uniqueFileName}`, blob, {
+          contentType: this.getContentType(extension),
+          upsert: true, // Replace existing file if same name
+        });
+
+      if (error) throw error;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('groomer-documents')
+        .getPublicUrl(`${documentType}s/${uniqueFileName}`);
+
+      console.log(`✅ ${documentType} document uploaded successfully:`, publicUrl);
+
+      return {
+        success: true,
+        url: publicUrl,
+      };
+    } catch (error: any) {
+      console.error(`❌ ${documentType} document upload failed:`, error);
+      return {
+        success: false,
+        error: error.message || `Failed to upload ${documentType} document`,
+      };
+    }
+  }
+
+  /**
    * Delete resume from Supabase Storage
    */
   async deleteResume(fileUrl: string): Promise<boolean> {
