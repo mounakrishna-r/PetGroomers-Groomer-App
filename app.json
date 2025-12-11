@@ -75,7 +75,7 @@
       "eas": {
         "projectId": "your-project-id"
       },
-      "backendUrl": "http://192.168.1.10:8090/api",
+      "backendUrl": "https://groomersonwheels-backend-353780625114.us-central1.run.app/api",
       "supabaseUrl": "https://wmzrwablpeueiaokhrqt.supabase.co",
       "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndtenJ3YWJscGV1ZWlhb2tocnF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM2MDQ2MTUsImV4cCI6MjA0OTE4MDYxNX0.kbmVvJRXdx-A1u_Gkt0fk1dkWXMvPP3LM-EhJK-wMEk"
     },

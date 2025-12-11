@@ -791,9 +791,58 @@ class GroomerAPI {
     try {
       const token = await AsyncStorage.getItem(STORAGE_KEYS.TOKEN);
       const groomerData = await AsyncStorage.getItem(STORAGE_KEYS.GROOMER_DATA);
+      console.log('🔍 AUTH STATUS CHECK:');
+      console.log('Token exists:', !!token);
+      console.log('Token preview:', token ? token.substring(0, 20) + '...' : 'null');
+      console.log('Groomer data exists:', !!groomerData);
+      if (groomerData) {
+        const parsed = JSON.parse(groomerData);
+        console.log('Groomer ID:', parsed.id, 'Name:', parsed.name);
+      }
       return !!(token && groomerData);
     } catch {
       return false;
+    }
+  }
+
+  // Debug method to check current auth details
+  async debugAuthStatus(): Promise<void> {
+    try {
+      console.log('=== 🔍 DEBUG AUTH STATUS ===');
+      const token = await AsyncStorage.getItem(STORAGE_KEYS.TOKEN);
+      const groomerData = await AsyncStorage.getItem(STORAGE_KEYS.GROOMER_DATA);
+      
+      console.log('Storage Keys:');
+      console.log('  TOKEN_KEY:', STORAGE_KEYS.TOKEN);
+      console.log('  GROOMER_DATA_KEY:', STORAGE_KEYS.GROOMER_DATA);
+      
+      console.log('\nStored Token:');
+      if (token) {
+        console.log('  Length:', token.length);
+        console.log('  Preview:', token.substring(0, 30) + '...');
+        console.log('  Full Token:', token);
+      } else {
+        console.log('  ❌ No token stored');
+      }
+      
+      console.log('\nStored Groomer Data:');
+      if (groomerData) {
+        const parsed = JSON.parse(groomerData);
+        console.log('  ID:', parsed.id);
+        console.log('  Name:', parsed.name);
+        console.log('  Email:', parsed.email);
+        console.log('  Phone:', parsed.phone);
+        console.log('  Full Data:', parsed);
+      } else {
+        console.log('  ❌ No groomer data stored');
+      }
+      
+      console.log('\nAPI Configuration:');
+      console.log('  Base URL:', API_BASE_URL);
+      
+      console.log('=== END DEBUG ===');
+    } catch (error) {
+      console.error('❌ Debug auth status error:', error);
     }
   }
 

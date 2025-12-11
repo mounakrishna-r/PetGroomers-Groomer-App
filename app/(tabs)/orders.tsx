@@ -46,6 +46,9 @@ export default function OrdersScreen() {
 
   const loadOrders = async () => {
     try {
+      // Debug auth status before making API call
+      await GroomerAPI.debugAuthStatus();
+      
       const response = await GroomerAPI.getAssignedOrders();
       if (response.success && response.data) {
         setOrders(response.data);
